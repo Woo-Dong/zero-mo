@@ -1,0 +1,49 @@
+.header-logo {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-size: 2.25rem;
+    text-align: center;
+  }
+  
+  .header-logo:hover {
+    text-decoration: none;
+  }
+
+h5 {
+    text-align: center;
+}
+
+form {
+    width: 50%;
+    padding: 20px 25px 60px;
+    margin: 20px auto;
+    background: #00c51a;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+input {
+    font-size: 16px;
+    border: 0;
+    border-radius: 5px;
+    outline: 0;
+    padding: 10px 15px;
+    margin-top: 15px;
+}
+
+button {
+    font-size: 16px;
+    border: 0;
+    border-radius: 5px;
+    outline: 0;
+    padding: 10px 15px;
+    margin-top: 15px;
+    color: #ffffff;
+    background: #ffda07
+}
+
+p {
+    text-align: right;
+    padding: 10px;
+}

@@ -1,0 +1,176 @@
+doctype html
+html
+head
+  meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  meta(name='description', content='')
+  meta(name='author', content='')
+  title Zero - Mo
+  // Bootstrap core CSS
+  link(href='/stylesheets/bootstrap.min.css', rel='stylesheet')
+  // Custom styles for this template
+  link(href='/stylesheets/index.css', rel='stylesheet')
+.container
+  header.header.py-3
+    .row.flex-nowrap.justify-content-between.align-items-center
+      .col-4.pt-1
+        a.text-muted(href='#')
+      .col-4.text-center
+        a.header-logo.text-warning
+          b Zero - Mo
+      .col-4.d-flex.justify-content-end.align-items-center
+        a.text-muted(href='#')
+          svg.mx-3(xmlns='http://www.w3.org/2000/svg', width='20', height='20', viewBox='0 0 24 24', fill='none', stroke='currentColor', stroke-width='2', stroke-linecap='round', stroke-linejoin='round')
+            circle(cx='10.5', cy='10.5', r='7.5')
+            line(x1='21', y1='21', x2='15.8', y2='15.8')
+        if (!currentUser) 
+          a.btn.btn-sm.btn-outline-secondary(href='logIn') Log In
+        else
+         a.btn.btn-sm.btn-outline-secondary(href='logout') Sign Out
+  .header-menu
+    .nav-scroller.py-1.mb-2
+      nav.nav.d-flex.justify-content-between.bg-success
+        a.p-2.text-white(href='/find') 공모전 찾기
+        a.p-2.text-white(href='/enroll') 공모전 등록
+        a.p-2.text-white(href='/manage') 공모전 관리
+        a.p-2.text-white(href='/mymenu') 마이메뉴
+  .jumbotron.p-3.p-md-5.text-white.rounded.bg-warning
+    // /.메인사진
+    .row
+      .col-md-6
+        h1.display-4.font-italic 삼성생명 금융영업전문가 과정
+        p.lead.my-3 지원기간:0000.00.00 ~ 0000.00.00     대상:대학생/대학원생    공모내용: 금융영엄 전문가 과정
+        p.lead.mb-0
+          a.text-white.font-weight-bold(href='#') 자세히 보기...
+      .col-md-6
+        img(src='images/images.jpg', style='width: 240px; height: 300px;')
+  main.container(role='main')
+    // /.메인내용
+    .row
+      aside.col-md-3.sidebar
+        // /.sidebar
+        .p-3.mb-3.bg-light.rounded
+          h4
+            b 분야별
+          ol.list-unstyled
+            li
+              a(href='./detail.htm') 전체
+            li
+              a(href='#') 기획/아이디어
+            li
+              a(href='#') 광고/마케팅
+            li
+              a(href='#') 웹/모바일
+            li
+              a(href='#') 봉사활동
+            li
+              a(href='#') 취업/창업
+            li
+              a(href='#') 기타
+          h4
+            b 응시대상자
+          ol.list-unstyled.mb-0
+            li
+              a(href='#') 일반인
+            li
+              a(href='#') 대학생
+            li
+              a(href='#') 대학원생
+            li
+              a(href='#') 청소년
+            li
+              a(href='#') 어린이
+            li
+              a(href='#') 제한없음
+          h4
+            b 주최사
+          ol.list-unstyled.mb-0
+            li
+              a(href='#') 정부/공공기관
+            li
+              a(href='#') 공기업
+            li
+              a(href='#') 대기업
+            li
+              a(href='#') 중소/벤처기업
+            li
+              a(href='#') 비영리
+            li
+              a(href='#') 해외
+          h4
+            b 시상내역
+          ol.list-unstyled.mb-0
+            li
+              a(href='#') 5천만원이상
+            li
+              a(href='#') 3천~5천만원
+            li
+              a(href='#') 1천~3천만원
+            li
+              a(href='#') 1천만원이하
+            li
+              a(href='#') 인턴채용
+      // sidebar
+      .col-md-9
+        .card.flex-md-row.mb-4.shadow-sm.h-md-250
+          .card-body.d-flex.flex-column.align-items-start
+            strong.d-inline-block.mb-2.text-success 오늘의 추천 공모전
+            h3.mb-0
+              a.text-dark(href='#') 공모전1
+            .mb-1.text-muted 접수기간: 0000/00/00~0000/00/00
+            p.card-text.mb-auto 분야/응모대상/주최/상금/홈페이지
+          img.card-img-right.flex-auto.d-none.d-lg-block(data-src='holder.js/200x250?theme=thumb', alt='Thumbnail [200x250]', src='./images/images.jpg', data-holder-rendered='true', style='width: 200px; height: 250px;')
+        .main
+          h3.pb-3.mb-4.font-italic.border-bottom Today's Contest List
+          .table-area
+            table.table.table-striped
+              thead
+                tr.bg-success
+                  th(scope='col') 번호
+                  th(scope='col') 공모전 명
+                  th(scope='col') 주최사
+                  th(scope='col') 대상
+                  th(scope='col') 접수기간
+              tbody
+                tr
+                  th(scope='row') 1
+                  td Mark
+                  td Otto
+                  td @mdo
+                  td
+                tr
+                  th(scope='row') 2
+                  td Jacob
+                  td Thornton
+                  td @fat
+                  td
+                tr
+                  th(scope='row') 3
+                  td Larry
+                  td the Bird
+                  td @twitter
+                  td
+                tr
+                  th(scope='row') 4
+                  td
+                  td
+                  td
+                  td
+          .pagination
+            // 버튼그룹
+            .btn-group(role='group', aria-label='First group')
+              button.btn.btn-secondary(type='button') <
+              button.btn.btn-secondary(type='button') 1
+              button.btn.btn-secondary(type='button') 2
+              button.btn.btn-secondary(type='button') 3
+              button.btn.btn-secondary(type='button') 4
+              button.btn.btn-secondary(type='button') 5
+              button.btn.btn-secondary(type='button') 6
+              button.btn.btn-secondary(type='button') 7
+              button.btn.btn-secondary(type='button') 8
+              button.btn.btn-secondary(type='button') 9
+              button.btn.btn-secondary(type='button') >
+
+        // /.blog-main
+        // /.row
+        // /.container

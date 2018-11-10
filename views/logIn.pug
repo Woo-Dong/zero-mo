@@ -1,0 +1,29 @@
+doctype html
+html(lang='en')
+  head
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    title Log in
+    // Bootstrap core CSS
+    link(href='/stylesheets/bootstrap.min.css', rel='stylesheet')
+    // Custom styles for this template
+    link(href='/stylesheets/login.css', rel='stylesheet')
+  body
+    a.header-logo.text-warning(href='/')
+      h1
+        b Zero - Mo
+    h5 로그인 화면
+    form
+        input(type='text', placeholder='아이디')
+        input.border-bottom(type='password', placeholder='패스워드')
+        p
+        .otherway-menu
+            a(href='/signUp')
+                p.otherway.bg-warning Zero - Mo 회원가입하기
+            a(href='#')
+                p.otherway.bg-danger gmail로 로그인하기
+            a(href='#')
+                p.otherway.bg-primary facebook으로 로그인하기
+
