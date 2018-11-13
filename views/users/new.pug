@@ -1,0 +1,33 @@
+doctype html
+html(lang='ko')
+  head
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    title 회원가입
+    // Bootstrap core CSS
+    link(href='../stylesheets/bootstrap.min.css', rel='stylesheet')
+    // Custom styles for this template
+    link(href='../stylesheets/SignUp.css', rel='stylesheet')
+  body
+    a.header-logo.text-warning(href='/')
+      h1
+        b Zero - Mo
+      if flashMessages
+        each texts, type in flashMessages
+          .container
+            .alert.alert-dismissible.fade.show(class=`alert-${type}`)
+              each msg in texts
+                | #{msg} 
+              button.close(type='button', data-dismiss='alert', aria-label='close')
+                span(aria-hidden='true') &times;
+    form(action='/users', method='POST')
+      h5.text-white 회원가입
+      input(type='text', id='idname', name='idname' placeholder='아이디를 입력하세요')
+      input(type='password', id='password', name='password', placeholder='패스워드를 입력하세요.') 
+      input(type='password', id='password_confirmation', name='password_confirmation', placeholder='패스워드를 다시 한번 입력하세요.') 
+      input(type='text', id='name', name='name', placeholder='이름을 입력하세요.')
+      button.btn.btn-warning(type='submit') 회원가입
+      p
+        a(href='/signin') 로그인 화면으로 돌아가기

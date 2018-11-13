@@ -1,7 +1,56 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+head
+  meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  meta(name='description', content='')
+  meta(name='author', content='')
+  title Zero - Mo
+  // Bootstrap core CSS
+  link(href='/stylesheets/bootstrap.min.css', rel='stylesheet')
+  // Custom styles for this template
+  link(href='/stylesheets/index.css', rel='stylesheet')
+body
+  block top-nav
+    .container
+      header.header.py-3
+        .row.flex-nowrap.justify-content-between.align-items-center
+          .col-4.pt-1
+            a.text-muted(href='#')
+          .col-4.text-center
+            a.header-logo.text-warning
+              b Zero - Mo
+          .col-4.d-flex.justify-content-end.align-items-center
+            a.text-muted(href='#')
+              svg.mx-3(xmlns='http://www.w3.org/2000/svg', width='20', height='20', viewBox='0 0 24 24', fill='none', stroke='currentColor', stroke-width='2', stroke-linecap='round', stroke-linejoin='round')
+                circle(cx='10.5', cy='10.5', r='7.5')
+                line(x1='21', y1='21', x2='15.8', y2='15.8')
+            if (!currentUser) 
+              a.btn.btn-sm.btn-outline-secondary(href='signin') Log In
+            else
+              a.btn.btn-sm.btn-outline-secondary(href='signout') Log Out
+      .header-menu
+        .nav-scroller.py-1.mb-2
+          nav.nav.d-flex.justify-content-between.bg-success
+            a.p-2.text-white(href='/find') 공모전 찾기
+            a.p-2.text-white(href='/enroll') 공모전 등록
+            a.p-2.text-white(href='/manage') 공모전 관리
+            if (!currentUser)
+              a.p-2.text-white(href='/users/') 마이메뉴
+            else
+              a.p-2.text-white(href=`/users/${currentUser._id}`) 마이메뉴
+  
+  block hero-unit
+    if flashMessages
+      each texts, type in flashMessages
+        .container
+          .alert.alert-dismissible.fade.show(class=`alert-${type}`)
+            each msg in texts
+              | #{msg} 
+            button.close(type='button', data-dismiss='alert', aria-label='close')
+              span(aria-hidden='true') &times;
+              
+
+  block content
+
+  block footer

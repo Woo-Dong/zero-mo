@@ -1,6 +1,9 @@
 var express = require('express'),
     User = require('../models/user');
+
 var router = express.Router();
+
+const crypto = require("crypto");
 
 function needAuth(req, res, next) {
     if (req.session.user) {
@@ -13,16 +16,16 @@ function needAuth(req, res, next) {
 
 function validateForm(form, options) {
   var name = form.name || "";
-  var email = form.email || "";
+  var idname = form.idname || "";
   name = name.trim();
-  email = email.trim();
+  idname = idname.trim();
 
   if (!name) {
     return 'Name is required.';
   }
 
-  if (!email) {
-    return 'Email is required.';
+  if (!idname) {
+    return 'ID is required.';
   }
 
   if (!form.password && options.needPassword) {
@@ -47,7 +50,7 @@ router.get('/', needAuth, (req, res, next) => {
       return next(err);
     }
     res.render('users/index', {users: users});
-  }); // TODO: pagination?
+  }); 
 });
 
 router.get('/new', (req, res, next) => {
@@ -78,14 +81,16 @@ router.put('/:id', needAuth, (req, res, next) => {
       req.flash('danger', 'Not exist user.');
       return res.redirect('back');
     }
-
-    if (user.password !== req.body.current_password) {
+    let inputPassword = req.body.current_password;
+    let hashPassword = crypto.createHash("sha512").update(inputPassword + user.salt).digest("hex");
+    
+    if (user.password !== hashPassword) {
       req.flash('danger', 'Password is incorrect');
       return res.redirect('back');
     }
 
     user.name = req.body.name;
-    user.email = req.body.email;
+    user.idname = req.body.idname;
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -125,26 +130,29 @@ router.post('/', (req, res, next) => {
     req.flash('danger', err);
     return res.redirect('back');
   }
-  User.findOne({email: req.body.email}, function(err, user) {
+  User.findOne({idname: req.body.idname}, function(err, user) {
     if (err) {
       return next(err);
     }
     if (user) {
-      req.flash('danger', 'Email address already exists.');
+      req.flash('danger', 'ID already exists.');
       return res.redirect('back');
     }
     var newUser = new User({
       name: req.body.name,
-      email: req.body.email,
+      idname: req.body.idname,
     });
-    newUser.password = req.body.password;
-
+    let inputPassword = req.body.password;
+    let salt = Math.round( new Date().valueOf() * Math.random() ) + "";
+    let hashPassword = crypto.createHash("sha512").update(inputPassword + salt).digest("hex");
+    newUser.password = hashPassword;
+    newUser.salt = salt;
     newUser.save(function(err) {
       if (err) {
         return next(err);
       } else {
         req.flash('success', 'Registered successfully. Please sign in.');
-        res.redirect('/');
+        res.redirect('/signin');
       }
     });
   });

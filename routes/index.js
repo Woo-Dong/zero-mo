@@ -1,25 +1,40 @@
-var express = require('express');
+var express = require('express'),
+  User = require('../models/user');
+
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const crypto = require("crypto");
 
+/* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-router.get('/enroll', function(req, res, next) {
-  res.render('enroll');
+router.get('/signin', function(req, res, next) {
+  res.render('signin');
 });
 
-router.get('/logIn', function(req, res, next) {
-  res.render('logIn');
+router.post('/signin', function(req, res, next) {
+  User.findOne({idname: req.body.idname}, function(err, user) {
+    let inputPassword = req.body.password;
+    let hashPassword = crypto.createHash("sha512").update(inputPassword + user.salt).digest("hex");
+    if (err) {
+      res.render('error', {message: "Error", error: err});
+    } else if (!user || user.password !== hashPassword) {
+      req.flash('danger', 'Invalid username or password.');
+      res.redirect('back');
+    } else {
+      req.session.user = user;
+      req.flash('success', 'Welcome!');
+      res.redirect('/');
+    }
+  });
 });
 
-router.get('/signUp', function(req, res, next) {
-  res.render('signUp');
+router.get('/signout', function(req, res, next) {
+  delete req.session.user;
+  req.flash('success', 'Successfully signed out.');
+  res.redirect('/');
 });
 
 module.exports = router;

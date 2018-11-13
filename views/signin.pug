@@ -1,0 +1,32 @@
+doctype html
+html(lang='ko')
+  head
+    link(href='/stylesheets/bootstrap.min.css', rel='stylesheet')
+    link(href='/stylesheets/login.css', rel='stylesheet')
+  body
+    a.header-logo.text-warning(href='/')
+      h1
+        b Zero - Mo
+    h5 로그인 화면
+    block hero-unit
+    if flashMessages
+      each texts, type in flashMessages
+        .container
+          .alert.alert-dismissible.fade.show(class=`alert-${type}`)
+            each msg in texts
+              | #{msg} 
+            button.close(type='button', data-dismiss='alert', aria-label='close')
+              span(aria-hidden='true') &times;
+    form.form-signin(action='/signin', method='POST')
+      input(type='text', id='idname', name='idname', placeholder='아이디')
+      input(type='password', id='password', name='password', placeholder='패스워드') 
+      button.btn.btn-warning.btn-block(type='submit') 로그인하기
+      p
+        .otherway-menu
+          a(href='/users/new')
+              p.otherway.bg-warning Zero - Mo 회원가입하기
+          a(href='#')
+              p.otherway.bg-danger gmail로 로그인하기
+          a(href='#')
+              p.otherway.bg-primary facebook으로 로그인하기
+          
