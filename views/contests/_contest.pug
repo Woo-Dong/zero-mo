@@ -1,0 +1,18 @@
+.content= contest.content
+.tags.badges
+  //- each tag in cotnest.tags
+  //-   span.badge.badge-phill.badge-secondary= tag
+  //-   | 
+.row
+  .col-sm
+    .numbers.
+      #[span.number.num-votes= contest.numLikes] 추천,
+      #[span.number.num-answers= contest.numAnswers] 댓글,
+      #[span.number.num-views= contest.numReads] views
+  .col-sm
+    .author
+      | 시작날짜 #{moment(contest.start).format('YYYY-MM-DD')}
+      | 종료날짜 #{moment(contest.end).format('YYYY-MM-DD')}
+      if contest.author
+        | 
+        | 담당자 #[a(href=`/users/${contest.author.id}`)= contest.author.name] 

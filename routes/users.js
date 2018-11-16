@@ -4,6 +4,7 @@ var express = require('express'),
 var router = express.Router();
 
 const crypto = require("crypto");
+const catchErrors = require('../lib/async-error');
 
 function needAuth(req, res, next) {
     if (req.session.user) {
@@ -43,15 +44,16 @@ function validateForm(form, options) {
   return null;
 }
 
-/* GET users listing. */
 router.get('/', needAuth, (req, res, next) => {
   User.find({}, function(err, users) {
     if (err) {
       return next(err);
     }
     res.render('users/index', {users: users});
-  }); 
+  });
+   
 });
+
 
 router.get('/new', (req, res, next) => {
   res.render('users/new', {messages: req.flash()});
@@ -92,7 +94,11 @@ router.put('/:id', needAuth, (req, res, next) => {
     user.name = req.body.name;
     user.idname = req.body.idname;
     if (req.body.password) {
-      user.password = req.body.password;
+      let inputPassword = req.body.password;
+      let salt = Math.round( new Date().valueOf() * Math.random() ) + "";
+      let hashPassword = crypto.createHash("sha512").update(inputPassword + salt).digest("hex");
+      user.password = hashPassword;
+      user.salt = salt;
     }
 
     user.save(function(err) {

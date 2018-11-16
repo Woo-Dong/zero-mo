@@ -1,0 +1,28 @@
+.contests
+    table.table.table-striped
+        thead
+        tr.bg-warning
+            th(scope='col') 번호
+            th(scope='col') 공모전 명
+            th(scope='col') 주최사
+            th(scope='col') 대상
+            th(scope='col') 시작날짜
+            th(scope='col') 종료날짜
+            th(scope='col') 추천
+            th(scope='col') 조회수
+            th(scope='col') 작성일
+        tbody
+        each contest, index in contests.docs
+            tr
+            .contest
+                td(scope='row') 
+                    h6= index+1
+                td 
+                    a(href=`/contests/${contest.id}`)= contest.title
+                td  #{contest.company}
+                td  #{contest.target}
+                td  #{moment(contest.start).format('MM-DD')}
+                td  #{moment(contest.end).format('MM-DD')}
+                td  #[span.number.num-votes= contest.numLikes]
+                td  #[span.number.num-votes= contest.numView]
+                td  #{moment(contest.createdAt).format('MM-DD')}

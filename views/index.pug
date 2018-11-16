@@ -1,17 +1,19 @@
 extends layout
 
+include ./includes/_paginate
+
 block content  
   main.container(role='main')
     // /.메인내용
     .jumbotron.p-3.p-md-5.text-white.rounded.bg-warning
       .row
         .col-md-6
-          h1.display-4.font-italic 삼성생명 금융영업전문가 과정
-          p.lead.my-3 지원기간:0000.00.00 ~ 0000.00.00     대상:대학생/대학원생    공모내용: 금융영엄 전문가 과정
+          h1.display-4.font-italic Zero-Mo
+          p.lead.my-3 공모전의 대가! 공모전의 바이브!
           p.lead.mb-0
             a.text-white.font-weight-bold(href='#') 자세히 보기...
         .col-md-6
-          img(src='images/images.jpg', style='width: 240px; height: 300px;')
+          img(src='images/favicon.png', style='width: 350px; height: 350px;')
     .row
       aside.col-md-3.sidebar
         // /.sidebar
@@ -20,7 +22,7 @@ block content
             b 분야별
           ol.list-unstyled
             li
-              a(href='./detail.htm') 전체
+              a(href='./contests') 전체
             li
               a(href='#') 기획/아이디어
             li
@@ -34,10 +36,10 @@ block content
             li
               a(href='#') 기타
           h4
-            b 응시대상자
+            b 공모대상자
           ol.list-unstyled.mb-0
             li
-              a(href='#') 일반인
+              a(href='./contests') 전체
             li
               a(href='#') 대학생
             li
@@ -46,13 +48,9 @@ block content
               a(href='#') 청소년
             li
               a(href='#') 어린이
-            li
-              a(href='#') 제한없음
           h4
             b 주최사
           ol.list-unstyled.mb-0
-            li
-              a(href='#') 정부/공공기관
             li
               a(href='#') 공기업
             li
@@ -63,6 +61,8 @@ block content
               a(href='#') 비영리
             li
               a(href='#') 해외
+            li
+              a(href='#') 기타
           h4
             b 시상내역
           ol.list-unstyled.mb-0
@@ -88,52 +88,12 @@ block content
           img.card-img-right.flex-auto.d-none.d-lg-block(data-src='holder.js/200x250?theme=thumb', alt='Thumbnail [200x250]', src='./images/images.jpg', data-holder-rendered='true', style='width: 200px; height: 250px;')
         .main
           h3.pb-3.mb-4.font-italic.border-bottom Today's Contest List
-          .table-area
-            table.table.table-striped
-              thead
-                tr.bg-success
-                  th(scope='col') 번호
-                  th(scope='col') 공모전 명
-                  th(scope='col') 주최사
-                  th(scope='col') 대상
-                  th(scope='col') 접수기간
-              tbody
-                tr
-                  th(scope='row') 1
-                  td Mark
-                  td Otto
-                  td @mdo
-                  td
-                tr
-                  th(scope='row') 2
-                  td Jacob
-                  td Thornton
-                  td @fat
-                  td
-                tr
-                  th(scope='row') 3
-                  td Larry
-                  td the Bird
-                  td @twitter
-                  td
-                tr
-                  th(scope='row') 4
-                  td
-                  td
-                  td
-                  td
+          if contests.total > 0
+            .table-area
+              include ./contests/_table
           .pagination
-            // 버튼그룹
-            .btn-group(role='group', aria-label='First group')
-              button.btn.btn-secondary(type='button') <
-              button.btn.btn-secondary(type='button') 1
-              button.btn.btn-secondary(type='button') 2
-              button.btn.btn-secondary(type='button') 3
-              button.btn.btn-secondary(type='button') 4
-              button.btn.btn-secondary(type='button') 5
-              button.btn.btn-secondary(type='button') 6
-              button.btn.btn-secondary(type='button') 7
-              button.btn.btn-secondary(type='button') 8
-              button.btn.btn-secondary(type='button') 9
-              button.btn.btn-secondary(type='button') >
+            +paginate(contests, '/', query)
 
+        // /.blog-main
+        // /.row
+        // /.container

@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+  .container
+    h1.main-title Edit Contest
+    form(action=`/contests/${contest.id}`, method="POST")
+      input(type="hidden", name="_method", value="PUT")
+      include _form
+      button.btn.btn-outline-warning(type="submit") 공모전 수정하기
