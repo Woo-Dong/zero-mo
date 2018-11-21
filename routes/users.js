@@ -29,6 +29,10 @@ function validateForm(form, options) {
     return 'ID is required.';
   }
 
+  if (!tel) {
+    return 'telephone number is required.';
+  }
+
   if (!form.password && options.needPassword) {
     return 'Password is required.';
   }
@@ -68,6 +72,7 @@ router.get('/:id/edit', needAuth, (req, res, next) => {
   });
 });
 
+
 router.put('/:id', needAuth, (req, res, next) => {
   var err = validateForm(req.body);
   if (err) {
@@ -93,6 +98,9 @@ router.put('/:id', needAuth, (req, res, next) => {
 
     user.name = req.body.name;
     user.idname = req.body.idname;
+    user.isAdmin = req.body.isAdmin;
+    user.tel = req.body.tel;
+
     if (req.body.password) {
       let inputPassword = req.body.password;
       let salt = Math.round( new Date().valueOf() * Math.random() ) + "";
@@ -147,6 +155,7 @@ router.post('/', (req, res, next) => {
     var newUser = new User({
       name: req.body.name,
       idname: req.body.idname,
+      tel : req.body.tel
     });
     let inputPassword = req.body.password;
     let salt = Math.round( new Date().valueOf() * Math.random() ) + "";

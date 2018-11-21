@@ -2,17 +2,52 @@ extends ../layout
 
 block content
   .container
-    h1.main-title= contest.title
+    form.form-inline.search-input-group(action='/contests', method='GET')
+      i.fa.fa-search
+      input.form-control.mr-sm-2(type='text', name='term', placeholder='Search', aria-label='Search', value=term)
+      button.btn.btn-warning(type="submit") 검색
+    //- .card.flex-md-row.mb-4.shadow-sm.h-md-650
+    .card.flex-md-row.mb-4.shadow-sm.h-md-650
+      .card-body.d-flex.flex-column.align-items-start
+        strong.d-inline-block.mb-2.text-success=contest.category
+        h2.mb-0= contest.title
+        p
+        .mb-1.text-muted
+          p.
+            시작날짜 #{moment(contest.start).format('YYYY-MM-DD')} &nbsp
+            종료날짜 #{moment(contest.end).format('YYYY-MM-DD')}
+          p. 
+            담당자 #{contest.author.name}
+          p.
+            담당자 연락처 #{contest.author.tel}
+          p.
+            기관 이름: #{contest.company}
+          p.
+            주최기관 종류: #{contest.company_category}
+          p.
+            유형: #{contest.category}
+          p.
+            대상자: #{contest.target} 
 
-    .question.show
-      include _contest
+          p.
+            시상금액: #{contest.prize}
+          
+          br
 
-      .buttons
-        button.btn.btn-primary #[i.fa.fa-thumbs-up] Like
-        | 
+          h3.
+            상세내용
+          p.card-text.mb-auto=contest.content
+
+      img.card-img-right.flex-auto.d-none.d-lg-block(data-src='holder.js/200x250?theme=thumb', 
+        alt='contest-images [400x500]', src='../images/images.jpg', data-holder-rendered='true', style='width: 400px; height: 500px;')
+
+    .buttons
+      button.btn.btn-warning #[i.fa.fa-thumbs-up] 좋아요
+      |
+      if(currentUser._id == contest.author.id) 
         a.btn.btn-outline-secondary(href=`/contests/${contest.id}/edit`) Edit
         | 
-        a.btn.btn-outline-danger.delete-btn(href="#", data-url=`/contests/${contest.id}?_method=delete`) Delete
+        a.btn.btn-outline-danger.delete-btn(href=`/contests/${contest.id}?_method=delete`) Delete
       
     if contest.numComments > 0
       hr
@@ -23,9 +58,9 @@ block content
 
     form(action=`/contests/${contest.id}/comments`, method='POST')
       .form-group
-        label(for='comment') Your Comment
+        label(for='comment') 댓글달기
         textarea.form-control(name="content", rows="5")
-      button.btn.btn-primary(type="submit") Post Your Comment
+      button.btn.btn-primary(type="submit") 댓글달기
 
   script.
     $(function() {

@@ -11,10 +11,14 @@ var session = require('express-session');
 var methodOverride = require('method-override');
 var flash = require('connect-flash');
 var mongoose   = require('mongoose');
+var passport = require('passport');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var contests = require('./routes/contests');
+
+var passportConfig = require('./lib/passport-config');
+
 
 var app = express();
 
@@ -45,24 +49,21 @@ app.use(cookieParser());
 
 app.use(methodOverride('_method', {methods: ['POST', 'GET']}));
 
-// sass, scss를 사용할 수 있도록
-// app.use(sassMiddleware({
-//   src: path.join(__dirname, 'public'),
-//   dest: path.join(__dirname, 'public'),
-//   indentedSyntax: false, // true = .sass and false = .scss
-//   debug: true,
-//   sourceMap: true
-// }));
-
 app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: 'long-long-long-secret-string-1313513tefgwdsvbjkvasd'
 }));
 
-app.use(flash()); // flash message를 사용할 수 있도록
+app.use(flash());
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+passportConfig(passport);
+
 
 app.use(function(req, res, next) {
   res.locals.currentUser = req.session.user;
@@ -74,6 +75,7 @@ app.use(function(req, res, next) {
 app.use('/', index); 
 app.use('/users', users);
 app.use('/contests', contests);
+require('./routes/auth')(app, passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

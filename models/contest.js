@@ -2,21 +2,22 @@ var mongoose = require('mongoose'),
     mongoosePaginate = require('mongoose-paginate'),
     Schema = mongoose.Schema;
 
-    const imageSchema = new mongoose.Schema({
+const imageSchema = new mongoose.Schema({
   width: Number,
   height: Number,
-  default: 
+  imgname: String
 });
 
 var schema = new Schema({
   author: {type: Schema.Types.ObjectId, ref: 'User' },
   title: {type: String, trim: true, required: true},
  
-  company: {type: String, default: '기타'},
+  company: {type: String, default: '이름없음'},
+  company_category: {type: String, default: '기타'},
   content: {type: String, trim: true, required: true},
   start: {type: Date, default: Date.now},
   end: {type: Date, default: Date.now},
-  prize: {type: Number, trim: true, default: 0},
+  prize: {type: String, trim: true, default: '없음'},
   category: {type: String, required: true, default: '기타'},
   target: {type: String, required: true, default: '제한없음'},
   

@@ -15,10 +15,14 @@ router.get('/', catchErrors(async (req, res, next) => {
 
   var query = {};
   const term = req.query.term;
+  const catTerm = req.query.catTerm;
   if (term) {
     query = {$or: [
-      {title: {'$regex': term, '$options': 'i'}},
-      {content: {'$regex': term, '$options': 'i'}}
+      // {title: {'$regex': term, '$options': 'i'}},
+      // {content: {'$regex': term, '$options': 'i'}},
+      // {category: {'$regex': term, '$options': 'i'}},
+      // {company_category: {'$regex': term, '$options': 'i'}},
+      {company: {'$regex': term, '$options': 'i'}}
     ]};
   }
 
@@ -27,8 +31,21 @@ router.get('/', catchErrors(async (req, res, next) => {
     populate: 'author', 
     page: page, limit: limit
   });
+
+
   res.render('index', {contests: contests, query: req.query});
 }));
+
+router.get('/', catchErrors(async (req, res, next) => {
+  var query_cate = {};
+  const term_cate = req.query.term_cate;
+  if (term_cate) {
+    query_cate =
+      {category: {'$regex': term_cate, '$options': 'i'}};
+    }
+  res.render('/contests/index', {query_cate: req.query_cate});
+}));
+
 
 // router.get('/', function(req, res, next) {
 //   res.render('index')});

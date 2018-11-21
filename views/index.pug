@@ -4,7 +4,7 @@ include ./includes/_paginate
 
 block content  
   main.container(role='main')
-    // /.메인내용
+
     .jumbotron.p-3.p-md-5.text-white.rounded.bg-warning
       .row
         .col-md-6
@@ -16,7 +16,7 @@ block content
           img(src='images/favicon.png', style='width: 350px; height: 350px;')
     .row
       aside.col-md-3.sidebar
-        // /.sidebar
+
         .p-3.mb-3.bg-light.rounded
           h4
             b 분야별
@@ -24,59 +24,46 @@ block content
             li
               a(href='./contests') 전체
             li
-              a(href='#') 기획/아이디어
+              a(href= "/contests?termCategory=기획/아이디어") 기획/아이디어
             li
-              a(href='#') 광고/마케팅
+              a(href="/contests?termCategory=광고/마케팅") 광고/마케팅
             li
-              a(href='#') 웹/모바일
+              a(href="/contests?termCategory=웹/모바일") 웹/모바일
             li
-              a(href='#') 봉사활동
+              a(href="/contests?termCategory=봉사활동") 봉사활동
             li
-              a(href='#') 취업/창업
+              a(href="/contests?termCategory=취업/창업") 취업/창업
             li
-              a(href='#') 기타
+              a(href="/contests?termCategory=기타") 기타
           h4
             b 공모대상자
           ol.list-unstyled.mb-0
             li
-              a(href='./contests') 전체
+              a(href="/contests?termTarget=전체") 전체
             li
-              a(href='#') 대학생
+              a(href="/contests?termTarget=대학생") 대학생
             li
-              a(href='#') 대학원생
+              a(href="/contests?termTarget=대학원생") 대학원생
             li
-              a(href='#') 청소년
+              a(href="/contests?termTarget=청소년") 청소년
             li
-              a(href='#') 어린이
+              a(href="/contests?termTarget=어린이") 어린이
           h4
             b 주최사
           ol.list-unstyled.mb-0
             li
-              a(href='#') 공기업
+              a(href="/contests?termCompCat=공기업") 공기업
             li
-              a(href='#') 대기업
+              a(href="/contests?termCompCat=대기업") 대기업
             li
-              a(href='#') 중소/벤처기업
+              a(href="/contests?termCompCat=중소/벤처기업") 중소/벤처기업
             li
-              a(href='#') 비영리
+              a(href="/contests?termCompCat=비영리") 비영리
             li
-              a(href='#') 해외
+              a(href="/contests?termCompCat=해외") 해외
             li
-              a(href='#') 기타
-          h4
-            b 시상내역
-          ol.list-unstyled.mb-0
-            li
-              a(href='#') 5천만원이상
-            li
-              a(href='#') 3천~5천만원
-            li
-              a(href='#') 1천~3천만원
-            li
-              a(href='#') 1천만원이하
-            li
-              a(href='#') 인턴채용
-      // sidebar
+              a(href="/contests?termCompCat=기타") 기타
+
       .col-md-9
         .card.flex-md-row.mb-4.shadow-sm.h-md-250
           .card-body.d-flex.flex-column.align-items-start
@@ -93,7 +80,3 @@ block content
               include ./contests/_table
           .pagination
             +paginate(contests, '/', query)
-
-        // /.blog-main
-        // /.row
-        // /.container

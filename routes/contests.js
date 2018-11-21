@@ -24,8 +24,26 @@ router.get('/', catchErrors(async (req, res, next) => {
   if (term) {
     query = {$or: [
       {title: {'$regex': term, '$options': 'i'}},
-      {content: {'$regex': term, '$options': 'i'}}
+      {content: {'$regex': term, '$options': 'i'}},
+      {category: {'$regex': term, '$options': 'i'}}
     ]};
+  }
+
+  const termCompCat = req.query.termCompCat;
+  if(termCompCat) {
+    query =
+      {company_category: {'$regex': termCompCat, '$options': 'i'}};
+  }
+
+  const termTarget = req.query.termTarget;
+  if(termTarget) {
+    query =
+      {target: {'$regex': termTarget, '$options': 'i'}};
+  }
+  const termCategory = req.query.termCategory;
+  if(termCategory) {
+    query =
+      {category: {'$regex': termCategory, '$options': 'i'}};
   }
 
   const contests = await Contest.paginate(query, {
@@ -45,12 +63,13 @@ router.get('/:id/edit', needAuth, catchErrors(async (req, res, next) => {
   res.render('contests/edit', {contest: contest});
 }));
 
-router.get('/:id', catchErrors(async (req, res, next) => {
+router.get('/:id', needAuth, catchErrors(async (req, res, next) => {
+  const user = req.session.user;
   const contest = await Contest.findById(req.params.id).populate('author');
   const comments = await Comment.find({contest: contest.id}).populate('author');
   contest.numView++;   
   await contest.save();
-  res.render('contests/show', {contest: contest, comments: comments});
+  res.render('contests/show', {user: user, contest: contest, comments: comments});
 }));
 
 router.put('/:id', catchErrors(async (req, res, next) => {
@@ -63,12 +82,13 @@ router.put('/:id', catchErrors(async (req, res, next) => {
   contest.title = req.body.title;
   contest.content = req.body.content;
   contest.company = req.body.company;
+  contest.company_category = req.body.company_category;
+  contest.category = req.body.category;
   contest.target = req.body.target;
   contest.start = req.body.start;
   contest.end = req.body.end;
   contest.prize = req.body.prize;
 
-  // contest.tags = req.body.tags.split(" ").map(e => e.trim());
 
   await contest.save();
   req.flash('success', 'Successfully updated');
@@ -82,13 +102,26 @@ router.delete('/:id', needAuth, catchErrors(async (req, res, next) => {
 }));
 
 router.post('/', needAuth, catchErrors(async (req, res, next) => {
+
   const user = req.session.user;
+
+  if(typeof(grecaptcha) != 'undefined') {
+    if (grecaptcha.getResponse() == "") { 
+      alert("리캡챠를 체크해야 합니다."); 
+      return false; 
+    } else {
+      return true;
+    }
+  }
+
   var contest = new Contest({
     title: req.body.title,
     author: user._id,
     content: req.body.content,
     target: req.body.target,
     company: req.body.company,
+    company_category: req.body.company_category,
+    category: req.body.category,
     start: req.body.start,
     end: req.body.end,
     prize: req.body.prize

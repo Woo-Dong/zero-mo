@@ -9,7 +9,11 @@ block content
       dd.col-sm-9 
         main-title= user.idname
 
-        
+      dt.col-sm-3 회원등급
+      if (user.isAdmin == true)
+        dd.col-sm-9 관리자
+      else
+        dd.col-sm-9  일반
 
       dt.col-sm-3 Created At
       dd.col-sm-9= user.createdAt

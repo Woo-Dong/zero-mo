@@ -1,18 +1,30 @@
 .content= contest.content
-.tags.badges
-  //- each tag in cotnest.tags
-  //-   span.badge.badge-phill.badge-secondary= tag
-  //-   | 
-.row
-  .col-sm
-    .numbers.
-      #[span.number.num-votes= contest.numLikes] 추천,
-      #[span.number.num-answers= contest.numAnswers] 댓글,
-      #[span.number.num-views= contest.numReads] views
-  .col-sm
-    .author
-      | 시작날짜 #{moment(contest.start).format('YYYY-MM-DD')}
-      | 종료날짜 #{moment(contest.end).format('YYYY-MM-DD')}
-      if contest.author
-        | 
-        | 담당자 #[a(href=`/users/${contest.author.id}`)= contest.author.name] 
+
+.card.flex-md-row.mb-4.shadow-sm.h-md-250
+  .card-body.d-flex.flex-column.align-items-start
+    strong.d-inline-block.mb-2.text-success  | category
+    h3.mb-0
+      | 공모전1
+    .mb-1.text-muted
+      p.
+        시작날짜 #{moment(contest.start).format('YYYY-MM-DD')}
+      p. 
+        종료날짜 #{moment(contest.end).format('YYYY-MM-DD')}
+      p. 
+        담당자 #[a(href=`/users/${contest.author.id}`)= contest.author.name]
+      
+      p.card-text.mb-auto 분야/응모대상/주최/상금/홈페이지
+  img.card-img-right.flex-auto.d-none.d-lg-block(data-src='holder.js/200x250?theme=thumb', 
+    alt='contest=images [200x250]', src='../images/images.jpg', data-holder-rendered='true', style='width: 200px; height: 250px;')
+
+.col-sm
+  .numbers.
+    #[span.number.num-votes= contest.numLikes] 추천,
+    #[span.number.num-answers= contest.numAnswers] 댓글,
+    #[span.number.num-views= contest.numReads] views
+.col-sm
+  .author
+    if contest.author
+      | 
+
+  
