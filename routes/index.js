@@ -6,7 +6,31 @@ var router = express.Router();
 const crypto = require("crypto");
 const Contest = require('../models/contest');
 const catchErrors = require('../lib/async-error');
+const aws = require('aws-sdk');
+const S3_BUCKET = process.env.S3_BUCKET;
 
+router.get('/s3', function(req, res, next) {
+  const s3 = new aws.S3({region: 'ap-northeast-2'});
+  const filename = req.query.filename;
+  const type = req.query.type;
+  const params = {
+    Bucket: S3_BUCKET,
+    key: filename,
+    Expires: 900,
+    ContentType: type,
+    ACL: 'public-read'
+  };
+  s3.getSignedUrl('putObject', params, function(err, data) {
+    if(err){
+      console.log(err);
+      return res.json({err: err});
+    }
+    res.json({
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${filename}`
+    });
+  });
+});
 /* GET home page. */
 
 router.get('/', catchErrors(async (req, res, next) => {
@@ -18,10 +42,6 @@ router.get('/', catchErrors(async (req, res, next) => {
   const catTerm = req.query.catTerm;
   if (term) {
     query = {$or: [
-      // {title: {'$regex': term, '$options': 'i'}},
-      // {content: {'$regex': term, '$options': 'i'}},
-      // {category: {'$regex': term, '$options': 'i'}},
-      // {company_category: {'$regex': term, '$options': 'i'}},
       {company: {'$regex': term, '$options': 'i'}}
     ]};
   }
@@ -47,9 +67,6 @@ router.get('/', catchErrors(async (req, res, next) => {
 }));
 
 
-// router.get('/', function(req, res, next) {
-//   res.render('index')});
-
 router.get('/signin', function(req, res, next) {
   res.render('signin');
 });
@@ -71,10 +88,5 @@ router.post('/signin', function(req, res, next) {
   });
 });
 
-router.get('/signout', function(req, res, next) {
-  delete req.session.user;
-  req.flash('success', 'Successfully signed out.');
-  res.redirect('/');
-});
 
 module.exports = router;

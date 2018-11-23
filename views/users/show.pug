@@ -20,8 +20,9 @@ block content
 
     hr
     p
-      a.btn.btn-outline-secondary(href='/users/') List
-      | 
+      if(user.isAdmin)
+        a.btn.btn-outline-secondary(href='/users/admin') 회원관리
+        |
       a.btn.btn-outline-primary(href=`/users/${user._id}/edit`) Edit
       | 
       a.btn.btn-outline-danger(href=`/users/${user._id}?_method=DELETE`) Delete

@@ -20,11 +20,15 @@ block content
         label(for='password_confirmation') 비밀번호 확인
         input.form-control(type='password', id='password_confirmation', name='password_confirmation', placeholder='Password Confirmation')
       .form-group
-        label(for='isAdmin') 회원등급
-          input.form-control(type="radio" id='isAdmin' name='isAdmin', value='true') 
-          | 관리자
-          input.form-control(type="radio" id='isAdmin' name='isAdmin', value='false', checked)
-          | 일반
+        label(for='tel') 연락처
+        input.form-control(type='text', id='tel', name='tel', placeholder='연락처', value=user.tel)
+      if (user.isAdmin)  
+        .form-group
+          label(for='isAdmin') 회원등급
+            input.form-control(type="radio" id='isAdmin' name='isAdmin', value='true') 
+            | 관리자
+            input.form-control(type="radio" id='isAdmin' name='isAdmin', value='false', checked)
+            | 일반
 
       
       a.btn.btn-outline-secondary(href='javascript:window.history.back();') 뒤로

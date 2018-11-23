@@ -9,47 +9,47 @@
     label(for="company_category") 주최기관 종류
     select(name="company_category")
         option(value="공기업")
-        | 공기업
+            | 공기업
         option(value="대기업")
-        | 대기업
+            | 대기업
         option(value="중소/벤처기업")
-        | 중소/벤처기업
+            | 중소/벤처기업
         option(value="비영리")
-        | 비영리
+            | 비영리
         option(value="해외")
-        | 해외
+            | 해외
         option(value="기타" selected="")
-        | 기타
+            | 기타
 
 .form-group
     label(for="category") 범주
     select(name="category")
         option(value="기획/아이디어")
-        | 기획/아이디어
+            | 기획/아이디어
         option(value="광고/마케팅")
-        | 광고/마케팅
+            | 광고/마케팅
         option(value="웹/모바일")
-        | 웹/모바일
+            | 웹/모바일
         option(value="봉사활동")
-        | 봉사활동
+            | 봉사활동
         option(value="취업/창업")
-        | 취업/창업
+            | 취업/창업
         option(value="기타" selected="")
-        | 기타
+            | 기타
 
 .form-group
     label(for="target") 공모대상자
     select(name="target")
         option(value="전체" selected="")
-        | 전체
+            | 전체
         option(value="대학생")
-        | 대학생
+            | 대학생
         option(value="대학원생")
-        | 대학원생
+            | 대학원생
         option(value="청소년")
-        | 청소년
+            | 청소년
         option(value="어린이")
-        | 어린이
+            | 어린이
 
 .form-group
     label(for="start") 시작날짜
@@ -62,8 +62,41 @@
     input.form-control(type="text", name="prize", placeholder="시상금액", value=contest.prize)
 .form-group
     label(for="content") 상세내용
-    textarea.form-control(rows='8', cols='60', name="content", placeholder="내용", value=contest.content )
+    textarea.form-control(rows='80', cols='60', name="content")=contest.content
+.form-group
+    label(for="img") 포스터 이미지
+    input#file.form-control(type="file")
+    input#url.form-control(type="text", readonly="readonly", name="img", value="")
+    img#preview.img-fluid(src="https://dummyimage.com/400x500/ccc/fff")
+
 .g-recaptcha(data-sitekey='your_site_key')
     
-p
 button.btn.btn-outline-warning(type="submit") 공모전 등록하기
+
+script.
+  $(function() {
+    $("#preview").hide();
+    $("#file").change(function() {
+      var file = $("#file")[0].files[0];
+      if (file) {
+        var url = "/s3?filename=" + encodeURIComponent(file.name) + 
+                  "&type=" + encodeURIComponent(file.type);
+        console.log(url);
+        $.getJSON(url, function(resp) {
+          console.log(resp.signedRequest);
+          $.ajax({
+            url: resp.signedRequest,
+            method: 'PUT',
+            data: file,
+            headers: {'x-amz-acl': 'public-read', 'Content-Type': file.type},
+            processData: false, 
+            contentType: file.type,
+            success: function() {
+              $("#preview").attr("src", resp.url).show();
+              $("#url").val(resp.url);
+            }
+          });
+        });
+      }
+    });
+  });
