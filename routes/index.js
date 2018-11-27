@@ -1,21 +1,26 @@
-var express = require('express'),
-  User = require('../models/user');
+var express = require('express');
+// var User = require('../models/user');
 
 var router = express.Router();
 
-const crypto = require("crypto");
+// const crypto = require("crypto");
 const Contest = require('../models/contest');
 const catchErrors = require('../lib/async-error');
 const aws = require('aws-sdk');
 const S3_BUCKET = process.env.S3_BUCKET;
+console.log(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY);
+
+const uuidv4 = require('uuid/v4');
+
 
 router.get('/s3', function(req, res, next) {
   const s3 = new aws.S3({region: 'ap-northeast-2'});
   const filename = req.query.filename;
   const type = req.query.type;
+  const uuid = uuidv4();
   const params = {
     Bucket: S3_BUCKET,
-    key: filename,
+    key: uuid + '/'+ filename,
     Expires: 900,
     ContentType: type,
     ACL: 'public-read'
@@ -67,26 +72,22 @@ router.get('/', catchErrors(async (req, res, next) => {
 }));
 
 
-router.get('/signin', function(req, res, next) {
-  res.render('signin');
-});
-
-router.post('/signin', function(req, res, next) {
-  User.findOne({idname: req.body.idname}, function(err, user) {
-    let inputPassword = req.body.password;
-    let hashPassword = crypto.createHash("sha512").update(inputPassword + user.salt).digest("hex");
-    if (err) {
-      res.render('error', {message: "Error", error: err});
-    } else if (!user || user.password !== hashPassword) {
-      req.flash('danger', 'Invalid username or password.');
-      res.redirect('back');
-    } else {
-      req.session.user = user;
-      req.flash('success', 'Welcome!');
-      res.redirect('/');
-    }
-  });
-});
+// router.post('/signin', function(req, res, next) {
+//   User.findOne({idname: req.body.idname}, function(err, user) {
+//     let inputPassword = req.body.password;
+//     let hashPassword = crypto.createHash("sha512").update(inputPassword + user.salt).digest("hex");
+//     if (err) {
+//       res.render('error', {message: "Error", error: err});
+//     } else if (!user || user.password !== hashPassword) {
+//       req.flash('danger', 'Invalid username or password.');
+//       res.redirect('back');
+//     } else {
+//       req.session.user = user;
+//       req.flash('success', 'Welcome!');
+//       res.redirect('/');
+//     }
+//   });
+// });
 
 
 module.exports = router;

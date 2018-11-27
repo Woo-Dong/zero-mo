@@ -22,7 +22,6 @@ var contests = require('./routes/contests');
 var passportConfig = require('./lib/passport-config');
 
 
-
 module.exports = (app, io) => {
   // view engine setup
   app.set('views', path.join(__dirname, 'views'));
@@ -59,7 +58,7 @@ module.exports = (app, io) => {
 
   const sessionStore = new session.MemoryStore();
   const sessionId = 'zero-mo.sid';
-  const sessionSecret =  'I AM DONGWOO HAHAHAHHHAAHHA'
+  const sessionSecret =  'I AM DONGWOO HAHAHAHHHAAHHA';
   // session을 사용할 수 있도록.
   app.use(session({
     name: sessionId,
@@ -80,7 +79,7 @@ module.exports = (app, io) => {
 
 
   app.use(function(req, res, next) {
-    res.locals.currentUser = req.session.user;
+    res.locals.currentUser = req.user;
     res.locals.flashMessages = req.flash();
     next();
   });
@@ -88,21 +87,22 @@ module.exports = (app, io) => {
 
   io.use(passportSocketIo.authorize({
     cookieParser: cookieParser,
-      key:          sessionId,     
-      secret:       sessionSecret,    
-      store:        sessionStore,       
-      passport:     passport,
-      success:      (data, accept) => {
-        console.log('successful connection to socket.io');
-        accept(null, true);
-      }, 
-      fail:         (data, message, error, accept) => {
-        console.log('failed connection to socket.io:', message);
-        accept(null, false);
-      }
-    }));
+    key:          sessionId,     
+    secret:       sessionSecret,    
+    store:        sessionStore,       
+    passport:     passport,
+    success:      (data, accept) => {
+      console.log('successful connection to socket.io');
+      accept(null, true);
+    }, 
+    fail:         (data, message, error, accept) => {
+      console.log('failed connection to socket.io:', message);
+      accept(null, false);
+    }
+  }));
 
     io.on('connection', socket => {
+      console.log('socket connection!');
       if (socket.request.user.logged_in) {
         socket.emit('welcome');
         socket.on('join', data => {
@@ -135,10 +135,5 @@ module.exports = (app, io) => {
     res.render('error');
   });
 
-  module.exports = app;
-
-
-  // amazon S3 =======================
-  // user
   return app;
 }

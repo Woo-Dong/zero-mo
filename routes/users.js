@@ -6,15 +6,25 @@ const crypto = require("crypto");
 const catchErrors = require('../lib/async-error');
 
 function needAuth(req, res, next) {
-    if (req.session.user) {
+    if (req.isAuthenticated() ) {
       next();
     } else {
       req.flash('danger', 'Please signin first.');
       res.redirect('/signin');
     }
 }
+function isAdmin(req, res, next){
+  const user = req.user;
+  console.log(user.name);
+  if(user.isAdmin){
+    next();
+  } else {
+    req.flash('danger', '관리자 권한이 없습니다.');
+    res.redirect('/');
+  }
+}
 
-function validateForm(form, options) {
+function validateForm(form, options, req) {
   var name = form.name || "";
   var idname = form.idname || "";
   name = name.trim();
@@ -43,10 +53,15 @@ function validateForm(form, options) {
   return null;
 }
 
-router.get('/admin', needAuth, catchErrors(async (req, res, next) => {
+router.get('/admin', needAuth, isAdmin, catchErrors(async (req, res, next) => {
   const users = await User.find({});
   res.render('users/index', {users: users});
 }));
+
+// router.get(':id/edit_admin', needAuth, catchErrors(async (req, res, next) => {
+//   const user = await User.findById(req.params.id);
+//   res.render('users/edit_admin', {user: user});
+// }));
 
 
 router.get('/new', (req, res, next) => {
@@ -54,12 +69,14 @@ router.get('/new', (req, res, next) => {
 });
 
 router.get('/:id/edit', needAuth, catchErrors(async (req, res, next) => {
-  const user = await User.find(req.params.id);
-  res.render('users/edit', {user: user});
+  const user = await User.findById(req.params.id);
+  const user_validAdmin = req.user;
+  res.render('users/edit', {user: user, sessionUser: user_validAdmin});
 }));
 
 
 router.put('/:id', needAuth, catchErrors(async (req, res, next) => {
+  
   const err = validateForm(req.body);
   if (err) {
     req.flash('danger', err);
@@ -71,9 +88,21 @@ router.put('/:id', needAuth, catchErrors(async (req, res, next) => {
     req.flash('danger', 'Not exist user.');
     return res.redirect('back');
   }
-  if (!await user.validateFormPassword(req.body.current_password)) {
-    req.flash('danger', '기존 비밀번호와 다릅니다.');
-    return res.redirect('back');
+  const user_validAdmin = req.user;
+  if(!user_validAdmin.isAdmin){     //일반유저 -> 비밀번호 설정
+
+    if (req.body.password) {
+      let inputPassword = req.body.password;
+      let salt = Math.round( new Date().valueOf() * Math.random() ) + "";
+      let hashPassword = crypto.createHash("sha512").update(inputPassword + salt).digest("hex");
+      user.password = hashPassword;
+      user.salt = salt;
+    }
+
+    if (!await user.validPassword(req.body.current_password)) {
+      req.flash('danger', '기존 비밀번호와 다릅니다.');
+      return res.redirect('back');
+    }
   }
 
   user.name = req.body.name;
@@ -81,13 +110,7 @@ router.put('/:id', needAuth, catchErrors(async (req, res, next) => {
   user.isAdmin = req.body.isAdmin;
   user.tel = req.body.tel;
 
-  if (req.body.password) {
-    let inputPassword = req.body.password;
-    let salt = Math.round( new Date().valueOf() * Math.random() ) + "";
-    let hashPassword = crypto.createHash("sha512").update(inputPassword + salt).digest("hex");
-    user.password = hashPassword;
-    user.salt = salt;
-  }
+  
 
   await user.save();
   req.flash('success', '성공적으로 수정되었습니다.');
@@ -107,6 +130,7 @@ router.get('/:id', catchErrors(async (req, res, next) => {
 }));
 
 router.post('/', catchErrors(async (req, res, next) => {
+
   var err = validateForm(req.body, {needPassword: true});
   if(err){
     req.flash('danger', err);

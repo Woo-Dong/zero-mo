@@ -17,13 +17,11 @@ router.get('/', catchErrors(async (req, res, next) => {
   res.json({contests: contests.docs, page: contests.page, pages: contests.pages});   
 }));
 
-// Read
 router.get('/:id', catchErrors(async (req, res, next) => {
   const contest = await Contest.findById(req.params.id).populate('author');
   res.json(contest);
 }));
 
-// Create
 router.post('', catchErrors(async (req, res, next) => {
   var contest = new Contest({
     title: req.body.title,

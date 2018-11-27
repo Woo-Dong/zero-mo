@@ -6,6 +6,7 @@ const catchErrors = require('../../lib/async-error');
 
 const router = express.Router();
 
+
 router.use(catchErrors(async (req, res, next) => {
   if (req.isAuthenticated()) {
     next();
@@ -16,7 +17,6 @@ router.use(catchErrors(async (req, res, next) => {
 
 router.use('/contests', require('./contests'));
 
-// Like for Question
 router.post('/contests/:id/favorite', catchErrors(async (req, res, next) => {
   const contest = await Contest.findById(req.params.id);
   if (!contest) {

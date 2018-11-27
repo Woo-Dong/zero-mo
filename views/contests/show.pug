@@ -33,16 +33,19 @@ block content
             상세내용
           p.card-text.mb-auto=contest.content
       if contest.img
-        img.img-fluid.card-img-right.flex-auto.d-none.d-lg-block(data-src='holder.js/400x500?theme=thumb', 
-          alt='contest-images [400x500]', src=contest.img, data-holder-rendered='true', style='width: 400px; height: 500px;')
+        img.img-fluid(src=contest.img)
+        //- img.img-fluid.card-img-right.flex-auto.d-none.d-lg-block(data-src='holder.js/400x500?theme=thumb', 
+        //-   alt='contest-images [400x500]', src=contest.img, data-holder-rendered='true', style='width: 400px; height: 500px;')
 
     .buttons
-      button.btn.btn-warning #[i.fa.fa-thumbs-up] 좋아요
-      |
-      if(currentUser._id == contest.author.id) 
-        a.btn.btn-outline-secondary(href=`/contests/${contest.id}/edit`) Edit
-        | 
-        a.btn.btn-outline-danger.delete-btn(href=`/contests/${contest.id}?_method=delete`) Delete
+      if currentUser
+        button.btn.btn-warning.contest-like-btn(data-id=contest.id)
+          span.loading #[i.fa.fa-spin.fa-refresh] 로딩중
+          span #[i.fa.fa-thumbs-up] 좋아요
+        if (currentUser._id == contest.author.id) 
+          a.btn.btn-outline-secondary(href=`/contests/${contest.id}/edit`) Edit
+          | 
+          a.btn.btn-outline-danger.delete-btn(href=`/contests/${contest.id}?_method=delete`) Delete
       
     if contest.numComments > 0
       hr
@@ -60,9 +63,11 @@ block content
   script.
     $(function() {
       $('.delete-btn').click(function() {
-        if (confirm('Are you sure to delete?')) {
+        if (confirm('정말로 삭제하시겠습니까?')) {
           location = $(this).data('url');
         }
         return false;
       });
     });
+
+  script(src='/javascripts/contest_client.js')

@@ -28,6 +28,6 @@ var schema = new Schema({
   toObject: {virtuals: true}
 });
 schema.plugin(mongoosePaginate);
-var contest = mongoose.model('Contest', schema);
+var Contest = mongoose.model('Contest', schema);
 
-module.exports = contest;
+module.exports = Contest;

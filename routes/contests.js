@@ -1,6 +1,6 @@
 const express = require('express');
 const Contest = require('../models/contest');
-const User = require('../models/user'); 
+// const User = require('../models/user'); 
 const Comment = require('../models/comment'); 
 const catchErrors = require('../lib/async-error');
 
@@ -9,7 +9,7 @@ module.exports = io => {
   const router = express.Router();
 
   function needAuth(req, res, next) {
-    if (req.session.user) {
+    if (req.isAuthenticated()) {
       next();
     } else {
       req.flash('danger', 'Please signin first.');
@@ -56,6 +56,24 @@ module.exports = io => {
     });
     res.render('contests/index', {contests: contests, query: req.query});
   }));
+
+
+  // router.get('/manage', needAuth, catchErrors(async (req, res, next) =>  {    //공모전 관리메뉴
+
+  //   const page = parseInt(req.query.page) || 1;
+  //   const limit = parseInt(req.query.limit) || 10;
+  //   const user = req.user;
+  //   const termMyContest = toString(user);
+  //   query = {author : termMyContest };
+
+  //   const contests = await Contest.paginate(query, {
+  //     sort: {createdAt: -1}, 
+  //     populate: 'author', 
+  //     page: page, limit: limit
+  //   });
+
+  //   res.render('contests/manage', {contest: contests});
+  // }));
 
   router.get('/new', needAuth, (req, res, next) => {
     res.render('contests/new', {contest: {}});
@@ -108,7 +126,7 @@ module.exports = io => {
 
   router.post('/', needAuth, catchErrors(async (req, res, next) => {
 
-    const user = req.session.user;
+    const user = req.user;
 
     if(typeof(grecaptcha) != 'undefined') {
       if (grecaptcha.getResponse() == "") { 
@@ -129,8 +147,7 @@ module.exports = io => {
       category: req.body.category,
       start: req.body.start,
       end: req.body.end,
-      prize: req.body.prize,
-      img: req.body.img
+      prize: req.body.prize
     });
     await contest.save();
     req.flash('success', 'Successfully posted');
@@ -138,7 +155,7 @@ module.exports = io => {
   }));
 
   router.post('/:id/comments', needAuth, catchErrors(async (req, res, next) => {
-    const user = req.session.user;
+    const user = req.user;
     const contest = await Contest.findById(req.params.id);
 
     if (!contest) {
@@ -156,7 +173,7 @@ module.exports = io => {
     await contest.save();
 
 
-    const url = `/contests/${contest._id}#${answer._id}`;
+    const url = `/contests/${contest._id}#${comment._id}`;
     io.to(contest.author.toString())
       .emit('answered', {url: url, contest: contest});
     // console.log('SOCKET EMIT', contest.author.toString(), 'commented', {url: url, contest: contest})

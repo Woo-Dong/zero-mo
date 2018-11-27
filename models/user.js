@@ -20,7 +20,12 @@ var schema = new Schema({
 schema.methods.validPassword = function(password) {
   let inputPassword = password;
   let hashPassword = crypto.createHash("sha512").update(inputPassword + this.salt).digest("hex");
-  return compare(hashPassword, this.password);
+  if(hashPassword == this.password){
+    return true;
+  }
+  else{
+    return false;
+  }
 }
 var User = mongoose.model('User', schema);
 

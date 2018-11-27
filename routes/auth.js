@@ -18,14 +18,15 @@ module.exports = (app, passport) => {
         failureRedirect : '/signin',
         failureFlash : true
       }), (req, res, next) => {
-        req.flash('success', 'Welcome!');
+        req.flash('success', '반갑습니다.');
         res.redirect('/');
       }
     );
   
     app.get('/signout', (req, res) => {
+      // delete req.session.user;
       req.logout();
-      req.flash('success', 'Successfully signed out');
+      req.flash('success', '성공적으로 로그아웃 되었습니다.');
       res.redirect('/');
     });
   };

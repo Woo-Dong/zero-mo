@@ -10,19 +10,20 @@ block content
         .form-group
         label(for='idname') 아이디
         input.form-control(type='text', id='idname', name='idname', placeholder='ID', value=user.idname)
-      .form-group
-        label(for='current_password') 현재 비밀번호
-        input.form-control(type='password', id='current_password', name='current_password', placeholder='Current Password')
-      .form-group
-        label(for='password') 수정할 비밀번호
-        input.form-control(type='password', id='password', name='password', placeholder='Password')
-      .form-group
-        label(for='password_confirmation') 비밀번호 확인
-        input.form-control(type='password', id='password_confirmation', name='password_confirmation', placeholder='Password Confirmation')
+      if (sessionUser.isAdmin == false)
+        .form-group
+          label(for='current_password') 현재 비밀번호
+          input.form-control(type='password', id='current_password', name='current_password', placeholder='Current Password')
+        .form-group
+          label(for='password') 수정할 비밀번호
+          input.form-control(type='password', id='password', name='password', placeholder='Password')
+        .form-group
+          label(for='password_confirmation') 비밀번호 확인
+          input.form-control(type='password', id='password_confirmation', name='password_confirmation', placeholder='Password Confirmation')
       .form-group
         label(for='tel') 연락처
         input.form-control(type='text', id='tel', name='tel', placeholder='연락처', value=user.tel)
-      if (user.isAdmin)  
+      if (sessionUser.isAdmin)  
         .form-group
           label(for='isAdmin') 회원등급
             input.form-control(type="radio" id='isAdmin' name='isAdmin', value='true') 

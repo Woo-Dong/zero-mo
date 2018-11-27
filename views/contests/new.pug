@@ -6,6 +6,8 @@ block content
     h1.main-title 공모전 등록하기
     form(action="/contests", method="POST")
       include _form
+      button.btn.btn-outline-warning(type="submit") 공모전 등록하기
+
 
   script(src="https://www.google.com/recaptcha/api.js", async='', defer='')
 
@@ -22,3 +24,4 @@ block content
     $(function() {
       $('textarea').froalaEditor()
     });
+  
