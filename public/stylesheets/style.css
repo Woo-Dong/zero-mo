@@ -5,4 +5,30 @@ body {
 a {
   color: #00B7FF; }
 
+
+  .contest-like-btn {
+    cursor: pointer; }
+  .contest-like-btn > span.dislike {
+    display: inline-block; }
+  .contest-like-btn.disabled{
+    color: #bbb;
+    cursor: default; }
+  
+
+
+     /* .contest-like-btn {
+      cursor: pointer; }
+      .contest-like-btn.for-loading {
+        display: none; }
+      .contest-like-btn.loading {
+        filter: opacity(30%);
+        cursor: wait; }
+        .contest-like-btn.loading > span {
+          display: none; }
+        .contest-like-btn.loading .for-loading{
+          display: inline-block; }
+      .contest-like-btn.disabled{
+        color: #bbb;
+       cursor: default; } */
+
 /*# sourceMappingURL=style.css.map */

@@ -6,7 +6,6 @@ const catchErrors = require('../../lib/async-error');
 
 const router = express.Router();
 
-
 router.use(catchErrors(async (req, res, next) => {
   if (req.isAuthenticated()) {
     next();
@@ -17,7 +16,7 @@ router.use(catchErrors(async (req, res, next) => {
 
 router.use('/contests', require('./contests'));
 
-router.post('/contests/:id/favorite', catchErrors(async (req, res, next) => {
+router.post('/contests/:id/like', catchErrors(async (req, res, next) => {
   const contest = await Contest.findById(req.params.id);
   if (!contest) {
     return next({status: 404, msg: 'Not exist contest'});

@@ -62,14 +62,18 @@
     input.form-control(type="text", name="prize", placeholder="시상금액", value=contest.prize)
 .form-group
     label(for="content") 상세내용
-    textarea.form-control(rows='80', cols='60', name="content")=contest.content
+    textarea.form-control(name='content', rows='20', cols='20') #{contest.content}
 .form-group
     label(for="img") 포스터 이미지
     input#file.form-control(type="file")
     input#url.form-control(type="text", readonly="readonly", name="img", value="")
     img#preview.img-fluid(src="https://dummyimage.com/400x500/ccc/fff")
 
-//- .g-recaptcha(data-sitekey='your_site_key')
+.recaptcha
+    .g-recaptcha(data-sitekey="6LcifH0UAAAAAGlPNzR1RXKkPabx-hIU1SLxqD5l")
+
+
+script(src='src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"', async='', defer='')
 
 script.
     $(function() {
@@ -81,23 +85,29 @@ script.
                     "&type=" + encodeURIComponent(file.type);
             console.log(url);
             $.getJSON(url, function(resp) {
-            console.log(resp.signedRequest);
-            $.ajax({
-                url: resp.signedRequest,
-                method: 'PUT',
-                data: file,
-                headers: {'x-amz-acl': 'public-read', 'Content-Type': file.type},
-                processData: false, 
-                contentType: file.type,
-                success: function() {
-                $("#preview").attr("src", resp.url).show();
-                $("#url").val(resp.url);
-                }
-            });
-            });
-        }
+                console.log(resp.signedRequest);
+                $.ajax({
+                    url: resp.signedRequest,
+                    method: 'PUT',
+                    data: file,
+                    headers: {'x-amz-acl': 'public-read', 'Content-Type': file.type},
+                    processData: false, 
+                    contentType: file.type,
+                    success: function() {
+                        $("#preview").attr("src", resp.url).show();
+                        $("#url").val(resp.url);
+                        }
+                    });
+                });
+            }
         });
     });
+
+    var onloadCallback = function() {
+        captcha = grecaptcha.render('recaptcha', {
+            'sitekey' : '6LcifH0UAAAAAGlPNzR1RXKkPabx-hIU1SLxqD5l'
+        });
+    };
 
 
 

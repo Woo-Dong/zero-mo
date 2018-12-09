@@ -18,6 +18,7 @@ var passportSocketIo = require('passport.socketio');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var contests = require('./routes/contests');
+var favorites = require('./routes/favorites');
 
 var passportConfig = require('./lib/passport-config');
 
@@ -42,6 +43,7 @@ module.exports = (app, io) => {
 
   const connStr = 
   'mongodb://dbuser:dwpark94@ds115154.mlab.com:15154/zero-mo-ver2';
+  //'mongodb://dbuser:dwpark94@ds115154.mlab.com:15154/zero-mo-ver2';
   // 'mongodb://localhost/dbtest1';
 
   mongoose.connect(connStr, {useMongoClient: true });
@@ -55,6 +57,14 @@ module.exports = (app, io) => {
 
   app.use(methodOverride('_method', {methods: ['POST', 'GET']}));
 
+
+  // app.use(sassMiddleware({
+  //     src: path.join(__dirname, 'public'),
+  //     dest: path.join(__dirname, 'public'),
+  //     indentedSyntax: false, // true = .sass and false = .scss
+  //     debug: true,
+  //     sourceMap: true
+  //   }));
 
   const sessionStore = new session.MemoryStore();
   const sessionId = 'zero-mo.sid';
@@ -104,7 +114,7 @@ module.exports = (app, io) => {
     io.on('connection', socket => {
       console.log('socket connection!');
       if (socket.request.user.logged_in) {
-        socket.emit('welcome');
+        socket.emit('로그인되었습니다.');
         socket.on('join', data => {
           socket.join(socket.request.user._id.toString());
         });
@@ -115,6 +125,7 @@ module.exports = (app, io) => {
   app.use('/', index); 
   app.use('/users', users);
   app.use('/contests', contests(io) );
+  app.use('/favorites', favorites(io) );
   require('./routes/auth')(app, passport);
   app.use('/api', require('./routes/api'));
 

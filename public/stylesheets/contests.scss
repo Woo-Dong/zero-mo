@@ -5,7 +5,7 @@
     color: #bbb;
   }
 }
-.question {
+.contest {
   line-height: 160%;
   margin-bottom: 1em;
   .title {
@@ -34,7 +34,7 @@
   font-weight: bold;
   color: #0f5ca6;
 }
-.questions {
+.contests {
   .content {
     max-height: 5em;
     overflow: hidden;
@@ -67,5 +67,22 @@
       margin-bottom: 0.5em;
       color: #bbb;
     }
+  }
+}
+
+.contest-like-btn {
+  .for-loading {display: none;}
+  cursor: pointer; 
+
+  &.loading {
+    & > span {display: none;}
+    .for-loading {display: inline-block;}
+    filter: opacity(30%);
+    cursor: wait;
+  }
+
+  &.disabled {
+    color: #bbb;
+    cursor: default;
   }
 }

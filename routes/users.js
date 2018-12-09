@@ -29,28 +29,29 @@ function validateForm(form, options, req) {
   var idname = form.idname || "";
   name = name.trim();
   idname = idname.trim();
-
-  if (!name) {
-    return 'Name is required.';
+  if(options.NonEditMode){
+    if (!name) {
+      return 'Name is required.';
+    }
+  
+    if (!idname) {
+      return 'ID is required.';
+    }
+  
+    if (!form.password) {
+      return 'Password is required.';
+    }
+  
+    if (form.password !== form.password_confirmation) {
+      return 'Passsword do not match.';
+    }
+  
+    if (form.password.length < 6) {
+      return 'Password must be at least 6 characters.';
+    }
   }
-
-  if (!idname) {
-    return 'ID is required.';
-  }
-
-  if (!form.password && options.needPassword) {
-    return 'Password is required.';
-  }
-
-  if (form.password !== form.password_confirmation) {
-    return 'Passsword do not match.';
-  }
-
-  if (form.password.length < 6) {
-    return 'Password must be at least 6 characters.';
-  }
-
-  return null;
+  else
+    return null;
 }
 
 router.get('/admin', needAuth, isAdmin, catchErrors(async (req, res, next) => {
@@ -77,7 +78,7 @@ router.get('/:id/edit', needAuth, catchErrors(async (req, res, next) => {
 
 router.put('/:id', needAuth, catchErrors(async (req, res, next) => {
   
-  const err = validateForm(req.body);
+  const err = validateForm(req.body, {NonEditMode: false});
   if (err) {
     req.flash('danger', err);
     return res.redirect('back');
@@ -119,7 +120,7 @@ router.put('/:id', needAuth, catchErrors(async (req, res, next) => {
 
 
 router.delete('/:id', needAuth, catchErrors(async (req, res, next) => {
-  const user = findOneAndRemove({_id: req.params.id});
+  const user = await User.findOneAndRemove({_id: req.params.id});
   req.flash('success', '회원탈퇴하였습니다.');
   res.redirect('/');
 }));
@@ -131,7 +132,7 @@ router.get('/:id', catchErrors(async (req, res, next) => {
 
 router.post('/', catchErrors(async (req, res, next) => {
 
-  var err = validateForm(req.body, {needPassword: true});
+  var err = validateForm(req.body, {NonEditMode: true});
   if(err){
     req.flash('danger', err);
     return res.redirect('back');

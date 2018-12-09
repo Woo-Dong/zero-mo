@@ -1,9 +1,9 @@
 const express = require('express');
 const Contest = require('../models/contest');
-// const User = require('../models/user'); 
+const User = require('../models/user'); 
 const Comment = require('../models/comment'); 
 const catchErrors = require('../lib/async-error');
-
+const Favorite = require('../models/favorite'); 
 
 module.exports = io => {
   const router = express.Router();
@@ -57,23 +57,17 @@ module.exports = io => {
     res.render('contests/index', {contests: contests, query: req.query});
   }));
 
+  //=========================================================
 
-  // router.get('/manage', needAuth, catchErrors(async (req, res, next) =>  {    //공모전 관리메뉴
+  router.get('/manage', needAuth, catchErrors(async (req, res, next) =>  {    //공모전 관리메뉴
 
-  //   const page = parseInt(req.query.page) || 1;
-  //   const limit = parseInt(req.query.limit) || 10;
-  //   const user = req.user;
-  //   const termMyContest = toString(user);
-  //   query = {author : termMyContest };
+    const user = req.user;
+    // console.log(user);
+    const contests = await Contest.find({author: user.id});
+    // console.log(contests);
 
-  //   const contests = await Contest.paginate(query, {
-  //     sort: {createdAt: -1}, 
-  //     populate: 'author', 
-  //     page: page, limit: limit
-  //   });
-
-  //   res.render('contests/manage', {contest: contests});
-  // }));
+    res.render('contests/manage', {contests: contests});
+  }));
 
   router.get('/new', needAuth, (req, res, next) => {
     res.render('contests/new', {contest: {}});
@@ -110,25 +104,30 @@ module.exports = io => {
     contest.end = req.body.end;
     contest.prize = req.body.prize;
     contest.img = req.body.img;
-    
-
 
     await contest.save();
-    req.flash('success', 'Successfully updated');
+    req.flash('success', '성공적으로 수정되었습니다.');
     res.redirect('/contests');
   }));
 
   router.delete('/:id', needAuth, catchErrors(async (req, res, next) => {
-    await Contest.findOneAndRemove({_id: req.params.id});
-    req.flash('success', 'Successfully deleted');
-    res.redirect('/contests');
+    if(req.params.id){
+      await Contest.findOneAndRemove({_id: req.params.id});
+      req.flash('success', '성공적으로 삭제하였습니다.');
+      res.redirect('/contests');
+    }
+    else{
+      alert("fail");
+      return false;
+      
+    }
   }));
 
   router.post('/', needAuth, catchErrors(async (req, res, next) => {
 
     const user = req.user;
 
-    if(typeof(grecaptcha) != 'undefined') {
+    if(typeof(req.grecaptcha) != 'undefined') {
       if (grecaptcha.getResponse() == "") { 
         alert("리캡챠를 체크해야 합니다."); 
         return false; 

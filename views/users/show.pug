@@ -23,6 +23,19 @@ block content
       if(user.isAdmin)
         a.btn.btn-outline-secondary(href='/users/admin') 회원관리
         |
-      a.btn.btn-outline-primary(href=`/users/${user._id}/edit`) Edit
+      a.btn.btn-outline-primary(href='/favorites') 즐겨찾기
       | 
-      a.btn.btn-outline-danger(href=`/users/${user._id}?_method=DELETE`) Delete
+      a.btn.btn-outline-primary(href=`/users/${user._id}/edit`) 회원정보 편집
+      | 
+      a.btn.btn-outline-danger.delete-btn(href=`/users/${user._id}?_method=DELETE`) 회원탈퇴
+
+  script.
+    $(function() {
+      $('.delete-btn').click(function() {
+        if (confirm('정말로 삭제하시겠습니까?')) {
+          location = $(this).data('url');
+        }
+        return false;
+      });
+    });
+    

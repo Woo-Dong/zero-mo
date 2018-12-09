@@ -31,7 +31,10 @@ block content
 
           h3.
             상세내용
-          p.card-text.mb-auto=contest.content
+          p.card-text.mb-auto #{contest.content}
+          //- p.card-text.mb-auto=contest.content
+
+    .contest.show
       if contest.img
         img.img-fluid(src=contest.img)
         //- img.img-fluid.card-img-right.flex-auto.d-none.d-lg-block(data-src='holder.js/400x500?theme=thumb', 
@@ -39,13 +42,12 @@ block content
 
     .buttons
       if currentUser
-        button.btn.btn-warning.contest-like-btn(data-id=contest.id)
-          span.loading #[i.fa.fa-spin.fa-refresh] 로딩중
-          span #[i.fa.fa-thumbs-up] 좋아요
+        a.btn.btn-warning.contest-like-btn(data-id=contest.id) #[i.fa.fa-thumbs-up] 좋아요
         if (currentUser._id == contest.author.id) 
-          a.btn.btn-outline-secondary(href=`/contests/${contest.id}/edit`) Edit
+          a.btn.btn-outline-secondary(href=`/contests/${contest.id}/edit`) 편집하기
           | 
-          a.btn.btn-outline-danger.delete-btn(href=`/contests/${contest.id}?_method=delete`) Delete
+          a.btn.btn-outline-danger.delete-btn(href=`/contests/${contest.id}?_method=DELETE`) 삭제하기
+          //- a.btn.btn-outline-danger.delete-btn(href=`/contests/${contest.id}?_method=DELETE`) 삭제하기
       
     if contest.numComments > 0
       hr
@@ -60,6 +62,7 @@ block content
         textarea.form-control(name="content", rows="5")
       button.btn.btn-primary(type="submit") 댓글달기
 
+  script(src='/javascripts/contest_client.js')
   script.
     $(function() {
       $('.delete-btn').click(function() {
@@ -70,4 +73,4 @@ block content
       });
     });
 
-  script(src='/javascripts/contest_client.js')
+  

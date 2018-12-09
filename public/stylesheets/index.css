@@ -120,3 +120,18 @@ h4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
+.contest-like-btn {
+  cursor: pointer; }
+.contest-like-btn.dislike {
+  display: none; }
+.contest-like-btn.loading {
+  filter: opacity(30%);
+  cursor: wait; }
+.contest-like-btn.loading > span {
+  display: none; }
+.contest-like-btn.loading .dislike{
+  display: inline-block; }
+.contest-like-btn.disabled{
+  color: #bbb;
+  cursor: default; }

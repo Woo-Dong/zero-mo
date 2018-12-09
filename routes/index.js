@@ -8,7 +8,7 @@ const Contest = require('../models/contest');
 const catchErrors = require('../lib/async-error');
 const aws = require('aws-sdk');
 const S3_BUCKET = process.env.S3_BUCKET;
-console.log(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY);
+// console.log(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY);
 
 const uuidv4 = require('uuid/v4');
 

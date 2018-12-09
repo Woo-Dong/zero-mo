@@ -76,5 +76,27 @@ router.delete('/:id', catchErrors(async (req, res, next) => {
   res.json({msg: 'deleted'});
 }));
 
+// router.delete('/:id', catchErrors(async (req, res, next) => {
+//   const contest = await Contest.findById(req.params.id);
+//   if (!contest) {
+//     return next({status: 404, msg: 'Not exist contest'});
+//   }
+//   await Contest.findOneAndRemove({_id: req.params.id});
+//   res.json({msg: 'deleted'});
+// }));
+
+// router.delete('/dislike/:id', catchErrors(async (req, res, next) => {
+    
+//   const favorite = await Favorite.findById(req.params.id);
+//   // console.log(favorite);
+//   if (!favorite) {
+//     return next({status: 404, msg: 'Not exist favorite'});
+//   }
+  
+//   await Favorite.findOneAndRemove({_id: req.params.id});
+//   req.flash('success', '즐겨찾기에서 삭제했습니다.');
+//   res.redirect('/contests/favorite');
+// }));
+
 
 module.exports = router;

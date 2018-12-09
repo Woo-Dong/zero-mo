@@ -3,9 +3,9 @@ extends ../layout
 block content
   .container
     h1.main-title 
-      | 내가 올린 공모전 리스트
-    if contests.total > 0
-      h4 총 #{contests.total} 개의 공모전이 있습니다.
+      | 즐겨찾기
+    if favorites.total > 0
+      h4 총 #{favorites.total} 개의 공모전이 있습니다.
     .d-flex.justify-content-end.align-items-center
       form.form-inline.search-input-group(action='/contests', method='GET')
           i.fa.fa-search
@@ -13,7 +13,7 @@ block content
           button.btn.btn-warning(type="submit") 검색
     p
       br
-    if contests.total <= 0 
+    if favorites.total <= 0 
       .alert.alert-info 현재 게시된 공모전이 없습니다.
     else
       .contests
@@ -28,26 +28,23 @@ block content
             th(scope='col') 종료날짜
             th(scope='col') 추천
             th(scope='col') 조회수
-            th(scope='col') 편집
-            th(scope='col') 삭제
+            //- th(scope='col') 즐겨찾기 삭제
 
         tbody
-        each contest in contests
+        each favorite in favorites
             tr
-            .contest
-                td 
-                    a(href=`/contests/${contest.id}`)= contest.title
-                td #{contest.company}
-                td  #{contest.company_category}
-                td  #{contest.target}
-                td  #{moment(contest.start).format('MM-DD')}
-                td  #{moment(contest.end).format('MM-DD')}
-                td  #[span.number.num-votes= contest.numLikes]
-                td  #[span.number.num-votes= contest.numView]
-                td 
-                    a.btn.btn-outline-secondary(href=`/contests/${contest.id}/edit`) 편집
-                td 
-                    a.btn.btn-outline-danger.delete-btn(href=`/contests/${contest.id}?_method=delete`) 삭제하기
+            .favorite
+                td
+                  a(href=`/contests/${favorite.contest.id}`)= favorite.contest.title
+                td #{favorite.contest.company}
+                td  #{favorite.contest.company_category}
+                td  #{favorite.contest.target}
+                td  #{moment(favorite.contest.start).format('MM-DD')}
+                td  #{moment(favorite.contest.end).format('MM-DD')}
+                td  #[span.number.num-votes= favorite.contest.numLikes]
+                td  #[span.number.num-votes= favorite.contest.numView]
+                //- td 
+                //-     a.btn.btn-outline-danger.delete-btn(href=`/favorites/${favorite.id}?_method=delete`) 삭제하기
 
   script.
     $(function() {

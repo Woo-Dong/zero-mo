@@ -10,13 +10,13 @@ head
   // Custom styles for this template
   link(href='/stylesheets/index.css', rel='stylesheet')
   //wysiwyg-editor CSS
-  
-  link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', type='text/css')
-  link(href='https://cdn.jsdelivr.net/npm/froala-editor@2.9.0/css/froala_editor.pkgd.min.css', rel='stylesheet', type='text/css')
-  link(href='https://cdn.jsdelivr.net/npm/froala-editor@2.9.0/css/froala_style.min.css', rel='stylesheet', type='text/css')
-  
+
   script(src='https://code.jquery.com/jquery-3.2.1.min.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js')
+  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js')
+  
+  script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js')
+  script(src='http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js')
   script(src='/javascripts/application.js')
   script(src='/socket.io/socket.io.js') 
   script(src='/javascripts/bootstrap-notify.js')
@@ -67,22 +67,18 @@ body
   block footer
 
   script.
-
-      // WebSocket을 만들고 접속
       var socket = io();
 
       socket.on('welcome', function() {
-        // welcome 메시지를 받으면 join을 보낸다.
         console.log('received welcome');
         socket.emit('join');
       });
 
       socket.on('answered', function(data) {
-        // answered를 받으면 링크를 notifier로 출력한다.
         var title = $('<div></div>').text(data.contest.title).html();
         $.notify({
           icon: 'fa fa-bell',
-          title: 'You have a new answer.',
+          title: 'You have a new comment.',
           url: data.url,
           message: title
         });
