@@ -58,7 +58,12 @@ router.put('/:id', catchErrors(async (req, res, next) => {
   contest.start = req.body.start;
   contest.end = req.body.end;
   contest.prize = req.body.prize;
+  if(req.body.img){
   contest.img = req.body.img;
+  }
+  if(req.body.commision){
+    contest.commision = req.body.commision;
+  }
   await contest.save();
   res.json(contest);
 }));
@@ -85,18 +90,18 @@ router.delete('/:id', catchErrors(async (req, res, next) => {
 //   res.json({msg: 'deleted'});
 // }));
 
-// router.delete('/dislike/:id', catchErrors(async (req, res, next) => {
+router.delete('/dislike/:id', catchErrors(async (req, res, next) => {
     
-//   const favorite = await Favorite.findById(req.params.id);
-//   // console.log(favorite);
-//   if (!favorite) {
-//     return next({status: 404, msg: 'Not exist favorite'});
-//   }
+  const favorite = await Favorite.findById(req.params.id);
+  // console.log(favorite);
+  if (!favorite) {
+    return next({status: 404, msg: 'Not exist favorite'});
+  }
   
-//   await Favorite.findOneAndRemove({_id: req.params.id});
-//   req.flash('success', '즐겨찾기에서 삭제했습니다.');
-//   res.redirect('/contests/favorite');
-// }));
+  await Favorite.findOneAndRemove({_id: req.params.id});
+  req.flash('success', '즐겨찾기에서 삭제했습니다.');
+  res.redirect('/contests/favorite');
+}));
 
 
 module.exports = router;

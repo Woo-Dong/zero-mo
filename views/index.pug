@@ -67,12 +67,14 @@ block content
       .col-md-9
         .card.flex-md-row.mb-4.shadow-sm.h-md-250
           .card-body.d-flex.flex-column.align-items-start
-            strong.d-inline-block.mb-2.text-success 오늘의 추천 공모전
+            strong.d-inline-block.mb-2.text-success 최신 업로드 공모전
             h3.mb-0
-              a.text-dark(href='#') 공모전1
-            .mb-1.text-muted 접수기간: 0000/00/00~0000/00/00
-            p.card-text.mb-auto 분야/응모대상/주최/상금/홈페이지
-          img.card-img-right.flex-auto.d-none.d-lg-block(data-src='holder.js/200x250?theme=thumb', alt='Thumbnail [200x250]', src='./images/images.jpg', data-holder-rendered='true', style='width: 200px; height: 250px;')
+              a.text-dark(href=`/contests/${contests.docs[0].id}`) #{contests.docs[0].title}
+            .mb-1.text-muted 접수기간: #{moment(contests.docs[0].start).format('YY-MM-DD')} ~ #{moment(contests.docs[0].end).format('YY-MM-DD')}
+            p.card-text.mb-auto 
+            b 분야/응모대상/주최/상금
+            |
+            p.card-text.mb-auto #{contests.docs[0].category}/#{contests.docs[0].target}/#{contests.docs[0].company}/#{contests.docs[0].prize}
         .main
           h3.pb-3.mb-4.font-italic.border-bottom Today's Contest List
           if contests.total > 0

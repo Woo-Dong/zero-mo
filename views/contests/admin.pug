@@ -3,14 +3,9 @@ extends ../layout
 block content
   .container
     h1.main-title 
-      | 내가 올린 공모전 리스트
+      | 관리자 모드 - 공모전 관리
     if contests.total > 0
-      h4 총 #{contests.total} 개의 공모전이 있습니다.
-    .d-flex.justify-content-end.align-items-center
-      form.form-inline.search-input-group(action='/contests', method='GET')
-          i.fa.fa-search
-          input.form-control.mr-sm-2(type='text', name='term', placeholder='Search', aria-label='Search', value=term)
-          button.btn.btn-warning(type="submit") 검색
+      h4 총 #{favorites.total} 개의 공모전이 있습니다.
     p
       br
     if contests.total <= 0 
@@ -28,16 +23,17 @@ block content
             th(scope='col') 종료날짜
             th(scope='col') 추천
             th(scope='col') 조회수
-            th(scope='col') 공개 여부
-            th(scope='col') 편집
-            th(scope='col') 삭제
+            th(scope='col') 게시여부
+            th(scope='col') 신고횟수
+            th(scope='col') 편집하기
+            th(scope='col') 공모전 삭제
 
         tbody
         each contest in contests
             tr
             .contest
-                td 
-                    a(href=`/contests/${contest.id}`)= contest.title
+                td
+                  a(href=`/contests/${contest.id}`)= contest.title
                 td #{contest.company}
                 td  #{contest.company_category}
                 td  #{contest.target}
@@ -46,6 +42,7 @@ block content
                 td  #[span.number.num-votes= contest.numLikes]
                 td  #[span.number.num-votes= contest.numView]
                 td  #{contest.commision}
+                td  #{contest.report}
                 td 
                     a.btn.btn-outline-secondary(href=`/contests/${contest.id}/edit`) 편집
                 td 

@@ -1,6 +1,6 @@
 .form-group
     label(for="title") 공모전 제목
-    input.form-control(type="text", name="title", placeholder="공모전 제목", value=contest.title )
+    input.form-control(type="text", name="title", placeholder="공모전 제목", value=contest.title)
 .form-group
     label(for="company") 주최기관 이름
     input.form-control(type="text", name="company", placeholder="주최기관 이름", value=contest.company)
@@ -63,60 +63,11 @@
 .form-group
     label(for="content") 상세내용
     textarea.form-control(name='content', rows='20', cols='20') #{contest.content}
+
 .form-group
-    label(for="img") 포스터 이미지
-    input#file.form-control(type="file")
-    input#url.form-control(type="text", readonly="readonly", name="img", value="")
-    img#preview.img-fluid(src="https://dummyimage.com/400x500/ccc/fff")
-
-.recaptcha
-    .g-recaptcha(data-sitekey="6LcifH0UAAAAAGlPNzR1RXKkPabx-hIU1SLxqD5l")
-
-
-script(src='src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"', async='', defer='')
-
-script.
-    $(function() {
-        $("#preview").hide();
-        $("#file").change(function() {
-        var file = $("#file")[0].files[0];
-        if (file) {
-            var url = "/s3?filename=" + encodeURIComponent(file.name) + 
-                    "&type=" + encodeURIComponent(file.type);
-            console.log(url);
-            $.getJSON(url, function(resp) {
-                console.log(resp.signedRequest);
-                $.ajax({
-                    url: resp.signedRequest,
-                    method: 'PUT',
-                    data: file,
-                    headers: {'x-amz-acl': 'public-read', 'Content-Type': file.type},
-                    processData: false, 
-                    contentType: file.type,
-                    success: function() {
-                        $("#preview").attr("src", resp.url).show();
-                        $("#url").val(resp.url);
-                        }
-                    });
-                });
-            }
-        });
-    });
-
-    var onloadCallback = function() {
-        captcha = grecaptcha.render('recaptcha', {
-            'sitekey' : '6LcifH0UAAAAAGlPNzR1RXKkPabx-hIU1SLxqD5l'
-        });
-    };
-
-    if(typeof(grecaptcha) != 'undefined') {
-        var response = grecaptcha.getResponse();
-        if (response.length == 0) { 
-            alert("리캡챠를 체크해야 합니다."); 
-            return false; 
-        } 
-        else {
-            return true;
-        }
-    }
-
+    label(for="commision") 공개여부
+    select(name="commision")
+        option(value="closed" selected="")
+            | 비공개
+        option(value="open")
+            | 공개

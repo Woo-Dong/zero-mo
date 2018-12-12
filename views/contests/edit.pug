@@ -4,9 +4,12 @@ block content
   .container
     h1.main-title 공모전 수정하기
 
-    form(action=`/contests/${contest.id}/`, method="POST")
-      input(type="hidden", name="_method", value="PUT")
-      include _form
+    form(action=`/contests/${contest.id}?_method=PUT`, method="POST")
+      //- input(type="hidden", name="_method", value="PUT")
+      if (sessionUser.isAdmin)
+        include _form_admin
+      else  
+        include _form
       button.btn.btn-outline-warning(type="submit") 공모전 등록하기
         //- form(action=`/contests/${contest.id}/`, method="POST")
 

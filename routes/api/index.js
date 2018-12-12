@@ -32,6 +32,20 @@ router.post('/contests/:id/like', catchErrors(async (req, res, next) => {
   return res.json(contest);
 }));
 
+router.post('/contests/:id/report', catchErrors(async (req, res, next) => {
+  const contest = await Contest.findById(req.params.id);
+  // console.log(contest);
+  if (!contest) {
+    return next({status: 404, msg: 'Not exist contest'});
+  }
+  contest.report++;
+  // console.log(contest.report);
+  await Promise.all(contest.save());
+  return res.json(contest);
+}));
+
+
+
 // Like for Answer
 router.post('/comments/:id/like', catchErrors(async (req, res, next) => {
   const comment = await Comment.findById(req.params.id);

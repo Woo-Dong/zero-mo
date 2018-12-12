@@ -14,8 +14,8 @@ var schema = new Schema({
   prize: {type: String, trim: true, default: '없음'},
   category: {type: String, required: true, default: '기타'},
   target: {type: String, required: true, default: '제한없음'},
-  Commision: {type: Boolean, default: false},
-
+  commision: {type: String, default: 'closed'},
+  report: {type: Number, default: 0},
   img: {type: String},
 
   numLikes: {type: Number, default: 0},

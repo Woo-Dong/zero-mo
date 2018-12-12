@@ -23,28 +23,11 @@ module.exports = io => {
   
       const favUser = await Favorite.find({author: user.id}).populate('contest');
       console.log(favUser);
-      // console.log(favUser.length);
-      // console.log("===============");
-      // console.log(favUser[0]);
-      // console.log("contest Obj: ", favUser[0].contest);
-  
-      // const arrContst_id = [];
-      // for (i=0; i<favUser.length; i++){
-      //   contest_obj = favUser[i].contest._doc;
-      //   console.log("_id: ", favUser[i]._id);
-      //   console.log("id: ",favUser[i].id);
-      //   fav_obj = {id: favUser[i].id};
-      //   console.log(fav_obj);
-      //   const obj = Object.assign({}, fav_obj, contest_obj);
-      //   console.log(obj);
-      //   arrContst_id.push(obj);
-        
-      // }
-  
+
       res.render('contests/favorite', {favorites: favUser});
     }));
   
-    router.delete('/:id/dislike', needAuth, catchErrors(async (req, res, next) => {
+    router.delete('/:id', needAuth, catchErrors(async (req, res, next) => {
       
       const favorite = await Favorite.find({_id: req.params.id});
       console.log(favorite);

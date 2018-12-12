@@ -43,8 +43,7 @@ module.exports = (app, io) => {
 
   const connStr = 
   'mongodb://dbuser:dwpark94@ds115154.mlab.com:15154/zero-mo-ver2';
-  //'mongodb://dbuser:dwpark94@ds115154.mlab.com:15154/zero-mo-ver2';
-  // 'mongodb://localhost/dbtest1';
+
 
   mongoose.connect(connStr, {useMongoClient: true });
   mongoose.connection.on('error', console.error);
@@ -57,14 +56,6 @@ module.exports = (app, io) => {
 
   app.use(methodOverride('_method', {methods: ['POST', 'GET']}));
 
-
-  // app.use(sassMiddleware({
-  //     src: path.join(__dirname, 'public'),
-  //     dest: path.join(__dirname, 'public'),
-  //     indentedSyntax: false, // true = .sass and false = .scss
-  //     debug: true,
-  //     sourceMap: true
-  //   }));
 
   const sessionStore = new session.MemoryStore();
   const sessionId = 'zero-mo.sid';

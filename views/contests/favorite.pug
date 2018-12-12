@@ -6,11 +6,6 @@ block content
       | 즐겨찾기
     if favorites.total > 0
       h4 총 #{favorites.total} 개의 공모전이 있습니다.
-    .d-flex.justify-content-end.align-items-center
-      form.form-inline.search-input-group(action='/contests', method='GET')
-          i.fa.fa-search
-          input.form-control.mr-sm-2(type='text', name='term', placeholder='Search', aria-label='Search', value=term)
-          button.btn.btn-warning(type="submit") 검색
     p
       br
     if favorites.total <= 0 
@@ -28,7 +23,7 @@ block content
             th(scope='col') 종료날짜
             th(scope='col') 추천
             th(scope='col') 조회수
-            //- th(scope='col') 즐겨찾기 삭제
+            th(scope='col') 즐겨찾기 삭제
 
         tbody
         each favorite in favorites
@@ -43,15 +38,15 @@ block content
                 td  #{moment(favorite.contest.end).format('MM-DD')}
                 td  #[span.number.num-votes= favorite.contest.numLikes]
                 td  #[span.number.num-votes= favorite.contest.numView]
-                //- td 
-                //-     a.btn.btn-outline-danger.delete-btn(href=`/favorites/${favorite.id}?_method=delete`) 삭제하기
+                td 
+                    a.btn.btn-outline-danger.delete-btn(href=`/favorites/${favorite.id}?_method=delete`) 삭제하기
 
-  script.
-    $(function() {
-      $('.delete-btn').click(function() {
-        if (confirm('정말로 삭제하시겠습니까?')) {
-          location = $(this).data('url');
-        }
-        return false;
-      });
-    });
+  //- script.
+  //-   $(function() {
+  //-     $('.delete-btn').click(function() {
+  //-       if (confirm('정말로 삭제하시겠습니까?')) {
+  //-         location = $(this).data('url');
+  //-       }
+  //-       return false;
+  //-     });
+  //-   });

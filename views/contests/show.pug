@@ -43,6 +43,7 @@ block content
     .buttons
       if currentUser
         a.btn.btn-warning.contest-like-btn(data-id=contest.id) #[i.fa.fa-thumbs-up] 좋아요
+        a.btn.btn-danger.contest-report-btn(data-id=contest.id) #[i.fa.fa-thumbs-up] 신고하기
         if (currentUser._id == contest.author.id) 
           a.btn.btn-outline-secondary(href=`/contests/${contest.id}/edit`) 편집하기
           | 
@@ -63,14 +64,14 @@ block content
       button.btn.btn-primary(type="submit") 댓글달기
 
   script(src='/javascripts/contest_client.js')
-  script.
-    $(function() {
-      $('.delete-btn').click(function() {
-        if (confirm('정말로 삭제하시겠습니까?')) {
-          location = $(this).data('url');
-        }
-        return false;
-      });
-    });
+  //- script.
+  //-   $(function() {
+  //-     $('.delete-btn').click(function() {
+  //-       if (confirm('정말로 삭제하시겠습니까?')) {
+  //-         location = $(this).data('url');
+  //-       }
+  //-       return false;
+  //-     });
+  //-   });
 
   

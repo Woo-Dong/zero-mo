@@ -45,8 +45,8 @@ body
             a.p-2.text-white(href='/contests') 공모전 찾기
             a.p-2.text-white(href='/contests/new') 공모전 등록
             if (!currentUser)
-              a.p-2.text-white(href='/users') 공모전 관리
-              a.p-2.text-white(href='/users') 마이메뉴
+              a.p-2.text-white(href='/signin') 공모전 관리
+              a.p-2.text-white(href='/signin') 마이메뉴
             else
               a.p-2.text-white(href='/contests/manage') 공모전 관리
               a.p-2.text-white(href=`/users/${currentUser._id}`) 마이메뉴

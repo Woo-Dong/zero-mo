@@ -1,9 +1,9 @@
 const express = require('express');
 const Contest = require('../models/contest');
-const User = require('../models/user'); 
+// const User = require('../models/user'); 
 const Comment = require('../models/comment'); 
 const catchErrors = require('../lib/async-error');
-const Favorite = require('../models/favorite'); 
+// const Favorite = require('../models/favorite'); 
 
 module.exports = io => {
   const router = express.Router();
@@ -16,37 +16,53 @@ module.exports = io => {
       res.redirect('/signin');
     }
   }
+  
+  function isAdmin(req, res, next){
+    const user = req.user;
+    console.log(user.name);
+    if(user.isAdmin){
+      next();
+    } else {
+      req.flash('danger', '관리자 권한이 없습니다.');
+      res.redirect('/');
+    }
+  }
 
   router.get('/', catchErrors(async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
-    var query = {};
+    var query = {commision: {'$regex' : 'open'}};
     const term = req.query.term;
     if (term) {
-      query = {$or: [
+      query = {$and: [ $or [
         {title: {'$regex': term, '$options': 'i'}},
         {content: {'$regex': term, '$options': 'i'}},
         {category: {'$regex': term, '$options': 'i'}},
         {company_category: {'$regex': term, '$options': 'i'}}
-      ]};
+      ],
+      {commision: {'$regex' : 'open'} }]}
     }
 
     const termCompCat = req.query.termCompCat;
     if(termCompCat) {
-      query =
-        {company_category: {'$regex': termCompCat, '$options': 'i'}};
+      query = {$and: [
+        {company_category: {'$regex': termCompCat, '$options': 'i'}},
+      {commision: {'$regex' : 'open'} }]}
     }
 
     const termTarget = req.query.termTarget;
     if(termTarget) {
-      query =
-        {target: {'$regex': termTarget, '$options': 'i'}};
+      query = {$and: [
+        {target: {'$regex': termTarget, '$options': 'i'}},
+      {commision: {'$regex' : 'open'} }]}
     }
+
     const termCategory = req.query.termCategory;
     if(termCategory) {
-      query =
-        {category: {'$regex': termCategory, '$options': 'i'}};
+      query = {$and: [
+        {category: {'$regex': termCategory, '$options': 'i'}},
+      {commision: {'$regex' : 'open'} }]}
     }
 
     const contests = await Contest.paginate(query, {
@@ -73,9 +89,19 @@ module.exports = io => {
     res.render('contests/new', {contest: {}});
   });
 
+  //===================================== 관리자 모드
+
+  router.get('/admin', needAuth, isAdmin, catchErrors(async (req, res, next) => {
+    const contests = await Contest.find({});
+    res.render('contests/admin', {contests: contests});
+  }));
+
+  // ===================================================
+
   router.get('/:id/edit', needAuth, catchErrors(async (req, res, next) => {
     const contest = await Contest.findById(req.params.id);
-    res.render('contests/edit', {contest: contest});
+    const user_validAdmin = req.user;
+    res.render('contests/edit', {contest: contest, sessionUser: user_validAdmin});
   }));
 
   router.get('/:id', needAuth, catchErrors(async (req, res, next) => {
@@ -103,38 +129,38 @@ module.exports = io => {
     contest.start = req.body.start;
     contest.end = req.body.end;
     contest.prize = req.body.prize;
+    if(req.body.img){
     contest.img = req.body.img;
-
+    }
+    if(req.body.commision){
+      contest.commision = req.body.commision;
+    }
+    console.log("success")
     await contest.save();
     req.flash('success', '성공적으로 수정되었습니다.');
     res.redirect('/contests');
   }));
 
   router.delete('/:id', needAuth, catchErrors(async (req, res, next) => {
-    if(req.params.id){
       await Contest.findOneAndRemove({_id: req.params.id});
       req.flash('success', '성공적으로 삭제하였습니다.');
       res.redirect('/contests');
-    }
-    else{
-      alert("fail");
-      return false;
-      
-    }
+      // res.redirect('back')
+
   }));
 
   router.post('/', needAuth, catchErrors(async (req, res, next) => {
 
     const user = req.user;
 
-    if(typeof(req.grecaptcha) != 'undefined') {
-      if (grecaptcha.getResponse() == "") { 
-        alert("리캡챠를 체크해야 합니다."); 
-        return false; 
-      } else {
-        return true;
-      }
-    }
+    // if(typeof(req.grecaptcha) != 'undefined') {
+    //   if (grecaptcha.getResponse() == "") { 
+    //     alert("리캡챠를 체크해야 합니다."); 
+    //     return false; 
+    //   } else {
+    //     return true;
+    //   }
+    // }
 
     var contest = new Contest({
       title: req.body.title,
@@ -149,7 +175,7 @@ module.exports = io => {
       prize: req.body.prize
     });
     await contest.save();
-    req.flash('success', 'Successfully posted');
+    req.flash('success', '등록 신청이 완료되었습니다. 관리자 승인 후 공개될 예정입니다. 감사합니다.');
     res.redirect('/contests');
   }));
 
